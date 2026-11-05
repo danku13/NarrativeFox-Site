@@ -7,32 +7,32 @@ export function Hero() {
       <div className="wrap hero-grid">
         <div>
           <p className="kicker">
-            Агентская система продвижения<span className="dot" aria-hidden="true">·</span>для бизнеса без маркетингового отдела
+            Контент-маркетинг под ключ<span className="dot" aria-hidden="true">·</span>для бизнеса без отдела маркетинга
           </p>
 
           <h1 id="hero-title" className="display-1">
-            Рой агентов ведёт ваш маркетинг. Решения — за вами.
+            Система ИИ-агентов ведёт ваш маркетинг. Решения — за вами.
           </h1>
 
           <p className="deck">
             NarrativeFox строит стратегию на фактах о вашем бизнесе, готовит тексты
-            для 13+ площадок и публикует их по расписанию. Telegram, VC.ru, Хабр,
+            под 13+ площадок и публикует их по расписанию. Telegram, VC.ru, Хабр,
             Дзен — там, где вас уже проверяют клиенты. Вы утверждаете решения,
             остальное делает система.
           </p>
 
           <div className="hero-actions">
-            <a className="btn btn-primary" href={TG_URL} target="_blank" rel="noopener noreferrer">
+            <a className="btn btn-primary" href={TG_URL} target="_blank" rel="noopener noreferrer" data-goal="tg-click">
               Написать в Telegram
               <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
             </a>
-            <a className="btn btn-outline" href={`mailto:${EMAIL}`}>
+            <a className="btn btn-outline" href={`mailto:${EMAIL}`} data-goal="mail-click">
               <Mail size={15} strokeWidth={2} aria-hidden="true" />
               {EMAIL}
             </a>
           </div>
 
-          <p className="hero-note">Отвечает основатель лично, обычно в течение дня.</p>
+          <p className="hero-note">Отвечает основатель лично, обычно в течение рабочего дня.</p>
         </div>
 
         <dl className="hero-facts" aria-label="Коротко о системе">

@@ -9,6 +9,8 @@ import { useEffect } from "react";
  */
 export function RevealScript() {
   useEffect(() => {
+    document.documentElement.classList.add("reveal-ready");
+
     const nodes = Array.from(document.querySelectorAll<HTMLElement>(".reveal"));
     if (nodes.length === 0) return;
 

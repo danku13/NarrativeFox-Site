@@ -12,12 +12,16 @@ import {
 } from "@/components/site/sections";
 import { CtaBand, Footer } from "@/components/site/cta";
 import { RevealScript } from "@/components/site/reveal";
+import { Metrics } from "@/components/site/metrics";
 
 export default function Home() {
   return (
     <div className="nfx" id="top">
+      <a className="skip-link" href="#main">
+        Перейти к содержанию
+      </a>
       <Header />
-      <main>
+      <main id="main">
         <Hero />
         <Stats />
         <Problems />
@@ -31,6 +35,7 @@ export default function Home() {
       </main>
       <Footer />
       <RevealScript />
+      <Metrics />
       <noscript>
         <style>{`.nfx .reveal { opacity: 1; translate: none; }`}</style>
       </noscript>

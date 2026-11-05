@@ -27,7 +27,7 @@ export function Header() {
           ))}
         </nav>
 
-        <a className="btn btn-primary header-cta" href={TG_URL} target="_blank" rel="noopener noreferrer">
+        <a className="btn btn-primary header-cta" href={TG_URL} target="_blank" rel="noopener noreferrer" data-goal="tg-click">
           <span className="btn-full">Написать в Telegram</span>
           <span className="btn-short">Telegram</span>
           <ArrowUpRight size={16} strokeWidth={2} aria-hidden="true" />
