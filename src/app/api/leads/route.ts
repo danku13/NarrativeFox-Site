@@ -31,6 +31,29 @@ function clientKey(req: NextRequest): string {
   return createHash("sha256").update(ip).digest("hex").slice(0, 16);
 }
 
+const CONTOURS = ["gateway", "solo", "business"] as const;
+const SEGMENTS = ["expert", "blogger", "b2b", "tech"] as const;
+const ENTRY_POINTS = [
+  "hero_cta",
+  "case_want_same",
+  "numbers_cta",
+  "fit_passed_cta",
+  "pilot_cta",
+  "tariff_cta",
+  "case_discuss_cta",
+  "final_form",
+  "sticky_header",
+] as const;
+
+function pickEnum<T extends readonly string[]>(
+  value: unknown,
+  allowed: T
+): T[number] | undefined {
+  return typeof value === "string" && (allowed as readonly string[]).includes(value)
+    ? (value as T[number])
+    : undefined;
+}
+
 export async function POST(req: NextRequest) {
   try {
     if (rateLimited(clientKey(req))) {
@@ -48,10 +71,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name, contact, message, website, elapsedMs } = body as Record<
-      string,
-      unknown
-    >;
+    const {
+      name,
+      contact,
+      message,
+      website,
+      elapsedMs,
+      contour,
+      segment,
+      entryPoint,
+    } = body as Record<string, unknown>;
 
     // Honeypot: скрытое поле, которое люди не заполняют.
     if (typeof website === "string" && website.trim() !== "") {
@@ -90,12 +119,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    /*
+      Контекст воронки: макро-контур, роль и точка входа.
+      До первого ответа видно, кто перед нами: мастер, который боится
+      потерять личный тон, или фаундер, которому критична база фактов.
+    */
     await db.lead.create({
       data: {
         name: cleanName,
         contact: cleanContact,
         message: cleanMessage,
         source: "landing",
+        contour: pickEnum(contour, CONTOURS) ?? "gateway",
+        segment: pickEnum(segment, SEGMENTS) ?? "",
+        entryPoint: pickEnum(entryPoint, ENTRY_POINTS) ?? "final_form",
       },
     });
 

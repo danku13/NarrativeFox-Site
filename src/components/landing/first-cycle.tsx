@@ -1,69 +1,29 @@
 import { Section, SectionHeader } from "./bits";
+import { FIRST_CYCLE } from "@/lib/content/shared";
 
 /*
-  Что клиент получает за первый цикл (рекомендация 2.5).
-  Editorial-подача (приём из metaflow.life): карточки без иконок,
-  сверху caps-мета со сроком, затем заголовок и текст.
+  Что вы получаете за первый цикл [БАЗА]: чек-лист по неделям.
+  Строка типичных каналов идёт следом (сегментный слой).
 */
 
-const ITEMS = [
-  {
-    meta: "Неделя 1",
-    title: "Исследование и стратегия",
-    text: "Разбор рынка, конкурентов и ваших текущих каналов. Итог: позиционирование и темы, с которых стоит начать.",
-  },
-  {
-    meta: "Недели 1-2",
-    title: "База фактов",
-    text: "Карточки фактов из ваших голосовых, заметок, документов и таблиц. У каждой карточки есть источник и статус: подтверждено или предположение.",
-  },
-  {
-    meta: "Неделя 2",
-    title: "Карта публикаций",
-    text: "План цикла: темы, каналы, порядок выхода и целевое действие, которое должна принести каждая публикация.",
-  },
-  {
-    meta: "Недели 2-3",
-    title: "Тексты для площадок",
-    text: "Материалы, адаптированные под каждый канал, с проверкой на ИИ-штампы. Никаких «комплексных подходов» без опоры на факты.",
-  },
-  {
-    meta: "Недели 3-4",
-    title: "Утверждение и публикация",
-    text: "Каждый текст вы читаете и утверждаете. Без вашего подтверждения ничего не выходит, каналы остаются вашими.",
-  },
-  {
-    meta: "Неделя 4",
-    title: "Отчёт по отклику",
-    text: "Переходы, целевые действия, вопросы читателей и выводы. Выводы меняют план следующего цикла, а не лежат в папке.",
-  },
-];
-
-export function FirstCycleSection() {
+export function FirstCycleSection({ index }: { index?: string }) {
   return (
     <Section id="cycle">
       <SectionHeader
-        eyebrow="Первый цикл"
-        index="02"
-        titleDark="Что вы получаете"
-        titleMuted="за первый цикл"
-        lead="Первый цикл занимает четыре недели. Всё перечисленное система делает на вашем материале и в ваших каналах."
+        eyebrow={FIRST_CYCLE.eyebrow}
+        index={index}
+        titleDark={FIRST_CYCLE.titleDark}
+        titleMuted={FIRST_CYCLE.titleMuted}
+        lead={FIRST_CYCLE.lead}
       />
-      <ul className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {ITEMS.map((item) => (
-          <li
-            key={item.title}
-            className="border-t border-stone-200 pt-5"
-          >
+      <ul className="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        {FIRST_CYCLE.items.map((item) => (
+          <li key={item.title} className="border-t border-stone-200 pt-5">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
               {item.meta}
             </p>
-            <h3 className="mt-3 text-lg font-semibold text-stone-900">
-              {item.title}
-            </h3>
-            <p className="mt-2.5 text-sm leading-relaxed text-stone-700">
-              {item.text}
-            </p>
+            <h3 className="mt-3 text-lg font-semibold text-stone-900">{item.title}</h3>
+            <p className="mt-2.5 text-sm leading-relaxed text-stone-700">{item.text}</p>
           </li>
         ))}
       </ul>

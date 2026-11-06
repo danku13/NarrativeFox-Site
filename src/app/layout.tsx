@@ -17,18 +17,22 @@ const sansDisplay = Manrope({
   display: "swap",
 });
 
-const TITLE = "NarrativeFox: контент-маркетинг для B2B без целого отдела";
+const TITLE = "NarrativeFox: контент-маркетинг ведёт система, вы направляете";
 const DESCRIPTION =
-  "NarrativeFox превращает ваши голосовые сообщения, заметки и документы в стратегию, публикации для разных площадок и регулярный разбор того, какой отклик они дают. Тексты и ключевые решения утверждаете вы, остальное делает система.";
+  "Присылаете голосовые, заметки и документы. NarrativeFox сам собирает стратегию и цепочки публикаций, готовит тексты для площадок, разбирает отклик и учится на ваших решениях. Ваша задача: направлять.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  title: {
+    default: TITLE,
+    template: "%s",
+  },
   description: DESCRIPTION,
   keywords: [
     "NarrativeFox",
     "контент-маркетинг",
     "контент-маркетинг для B2B",
+    "контент-маркетинг для экспертов",
     "ИИ-агенты",
     "Telegram",
     "Хабр",
@@ -51,7 +55,7 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "NarrativeFox: контент-маркетинг для B2B без целого отдела",
+        alt: "NarrativeFox: контент-маркетинг ведёт система, вы направляете",
       },
     ],
   },

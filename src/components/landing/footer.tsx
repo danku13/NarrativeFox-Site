@@ -1,15 +1,15 @@
 import { Logo } from "./header";
 
 /*
-  Подвал без личных контактов и без пустых строк вида
-  «За NarrativeFox: стратегия…» (раздел 4 рекомендаций).
+  Подвал без личных контактов. Единая защищённая точка входа: форма.
+  Навигация повторяет маршруты сайта v3.0.
 */
 
 const NAV = [
-  { href: "#example", label: "Пример работы" },
-  { href: "#how", label: "Как работает" },
-  { href: "#pilot", label: "Пилот" },
-  { href: "#faq", label: "Вопросы" },
+  { href: "/solo", label: "Для экспертов и авторов" },
+  { href: "/business", label: "Для B2B и техно-продуктов" },
+  { href: "/how-it-works", label: "Как устроена система" },
+  { href: "/pilot", label: "Пилот и стоимость" },
 ];
 
 export function SiteFooter() {
@@ -19,7 +19,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-3">
           <Logo />
           <p className="text-sm text-stone-500">
-            © 2026 NarrativeFox. Контент-маркетинг для B2B.
+            © 2026 NarrativeFox. Контент-маркетинг ведёт система.
           </p>
         </div>
         <nav aria-label="Навигация в подвале">

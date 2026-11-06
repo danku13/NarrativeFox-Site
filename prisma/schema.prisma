@@ -15,11 +15,18 @@ datasource db {
 
 // Заявки с посадочной страницы. Единственный защищённый канал связи:
 // форма с антиспам-проверкой, без публичной почты и личных контактов.
+// Контекст воронки v3.0: контур, роль и точка входа заявки.
 model Lead {
-  id        String   @id @default(cuid())
-  name      String
-  contact   String
-  message   String
-  source    String?  @default("landing")
-  createdAt DateTime @default(now())
+  id         String   @id @default(cuid())
+  name       String
+  contact    String
+  message    String
+  source     String?  @default("landing")
+  // Макро-контур: gateway | solo | business
+  contour    String?  @default("gateway")
+  // Роль внутри контура: expert | blogger | b2b | tech, пусто если неизвестна
+  segment    String?  @default("")
+  // Какая кнопка открыла форму: hero_cta, tariff_cta, final_form и другие
+  entryPoint String?  @default("final_form")
+  createdAt  DateTime @default(now())
 }

@@ -37,12 +37,14 @@ export function Section({
 export function SectionHeader({
   eyebrow,
   index,
+  total = "07",
   titleDark,
   titleMuted,
   lead,
 }: {
   eyebrow: string;
   index?: string;
+  total?: string;
   titleDark: string;
   titleMuted?: string;
   lead?: ReactNode;
@@ -58,7 +60,7 @@ export function SectionHeader({
             className="font-display text-sm font-semibold tabular-nums text-stone-400"
             aria-hidden="true"
           >
-            {index} <span className="text-stone-300">/ 07</span>
+            {index} <span className="text-stone-300">/ {total}</span>
           </span>
         ) : null}
       </div>
