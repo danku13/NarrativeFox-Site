@@ -85,3 +85,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Первая публикация после смены режима сайта может идти дольше
+          # дефолтных 10 минут: ждём до 20.
+          timeout: 1200000
