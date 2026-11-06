@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/landing/footer";
 import { Section, SectionHeader } from "@/components/landing/bits";
 import { PilotConditionsSection, PilotNotFitSection } from "@/components/landing/pilot";
 import { TariffsSection } from "@/components/landing/tariffs";
+import { PilotContourView } from "@/components/landing/pilot-contour";
 import {
   BusinessEconomicsSection,
   BusinessPricingSection,
@@ -16,9 +17,11 @@ import { ArrowRight } from "lucide-react";
 /*
   /pilot: условия пилота и тарификация по контуру.
   ?contour=solo показывает тарифы B2C, ?contour=business показывает
-  разбор экономики и стоимость по кейсу. Без параметра показаны
-  оба блока с подписями: страница самодостаточна для прямого входа.
-  Цена сервиса нигде не указана: только по запросу.
+  разбор экономики и стоимость по кейсу. Без параметра показана
+  развилка с подписями: страница самодостаточна для прямого входа.
+  Выбор контура читается на клиенте (PilotContourView), поэтому
+  страница остаётся статической. Цена сервиса нигде не указана:
+  только по запросу.
 */
 
 export const metadata: Metadata = {
@@ -34,18 +37,7 @@ export const metadata: Metadata = {
   },
 };
 
-type PilotContour = "solo" | "business" | "all";
-
-export default async function PilotPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-  const raw = typeof params.contour === "string" ? params.contour : "";
-  const contour: PilotContour =
-    raw === "solo" || raw === "business" ? (raw as PilotContour) : "all";
-
+export default function PilotPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
@@ -63,18 +55,16 @@ export default async function PilotPage({
         {/* Состав и условия: одинаковы для всех */}
         <PilotConditionsSection />
 
-        {/* Тарификация по контуру */}
-        {contour === "solo" ? <TariffsSection /> : null}
-
-        {contour === "business" ? (
-          <>
-            <BusinessEconomicsSection />
-            <BusinessPricingSection />
-          </>
-        ) : null}
-
-        {contour === "all" ? (
-          <>
+        {/* Тарификация и форма по контуру: развилка на клиенте */}
+        <PilotContourView
+          solo={<TariffsSection />}
+          business={
+            <>
+              <BusinessEconomicsSection />
+              <BusinessPricingSection />
+            </>
+          }
+          all={
             <Section id="pricing-fork" tone="muted">
               <SectionHeader
                 eyebrow="Стоимость"
@@ -128,39 +118,37 @@ export default async function PilotPage({
                 </div>
               </div>
             </Section>
-          </>
-        ) : null}
-
-        <PilotNotFitSection />
-        <PilotFaqSection />
-
-        {/* Финальная форма: контекст зависит от контура */}
-        {contour === "solo" ? (
-          <LeadForm
-            contour="solo"
-            entryPoint="tariff_cta"
-            titleDark="Заявка на пилот"
-            titleMuted="для экспертов и авторов"
-            lead="Коротко опишите дело и текущие каналы. Разберём их, подберём тариф и предложим формат первого цикла. Ответим в течение рабочего дня."
-          />
-        ) : null}
-        {contour === "business" ? (
-          <LeadForm
-            contour="business"
-            entryPoint="case_discuss_cta"
-            titleDark="Заявка на разбор кейса"
-            titleMuted="для компаний и техно-продуктов"
-            submitLabel="Обсудить кейс"
-            lead="Опишите практику или продукт и текущие каналы. Вернёмся с форматом первого цикла и сметой в течение рабочего дня."
-          />
-        ) : null}
-        {contour === "all" ? (
-          <LeadForm
-            contour="gateway"
-            entryPoint="final_form"
-            lead="Не уверены, какой контур ваш? Коротко опишите, чем занимаетесь и где публикуетесь: подберём формат первого цикла и назовём смету. Ответим в течение рабочего дня."
-          />
-        ) : null}
+          }
+          soloForm={
+            <LeadForm
+              contour="solo"
+              entryPoint="tariff_cta"
+              titleDark="Заявка на пилот"
+              titleMuted="для экспертов и авторов"
+              lead="Коротко опишите дело и текущие каналы. Разберём их, подберём тариф и предложим формат первого цикла. Ответим в течение рабочего дня."
+            />
+          }
+          businessForm={
+            <LeadForm
+              contour="business"
+              entryPoint="case_discuss_cta"
+              titleDark="Заявка на разбор кейса"
+              titleMuted="для компаний и техно-продуктов"
+              submitLabel="Обсудить кейс"
+              lead="Опишите практику или продукт и текущие каналы. Вернёмся с форматом первого цикла и сметой в течение рабочего дня."
+            />
+          }
+          allForm={
+            <LeadForm
+              contour="gateway"
+              entryPoint="final_form"
+              lead="Не уверены, какой контур ваш? Коротко опишите, чем занимаетесь и где публикуетесь: подберём формат первого цикла и назовём смету. Ответим в течение рабочего дня."
+            />
+          }
+        >
+          <PilotNotFitSection />
+          <PilotFaqSection />
+        </PilotContourView>
       </main>
       <SiteFooter />
     </div>

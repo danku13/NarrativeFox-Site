@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, CheckCircle2, Loader2 } from "lucide-react";
+import { Send, CheckCircle2, Loader2, Inbox } from "lucide-react";
 import { FORM } from "@/lib/content/shared";
 import type { Contour, EntryPoint, SegmentContent, SegmentState } from "@/lib/content/types";
 import { useRole } from "./role-switcher";
@@ -13,10 +13,22 @@ import { useRole } from "./role-switcher";
 /*
   Единственный защищённый канал связи: короткая форма с антиспамом.
   Вместе с заявкой уходит контекст воронки: контур, роль и точка входа.
-  Антиспам: honeypot-поле + временная ловушка (elapsedMs) на сервере.
+
+  Серверный режим: POST /api/leads с honeypot-полем и временной
+  ловушкой (elapsedMs) на сервере.
+
+  Статический режим (NEXT_PUBLIC_STATIC_EXPORT=1, GitHub Pages):
+  приёмник ищется в таком порядке: внешний API (NEXT_PUBLIC_LEAD_ENDPOINT,
+  контракт тот же), затем почтовый клиент посетителя
+  (NEXT_PUBLIC_LEAD_EMAIL), без них честное уведомление, что приём
+  заявок ещё не подключён.
 */
 
-type Status = "idle" | "sending" | "success" | "error";
+type Status = "idle" | "sending" | "success" | "error" | "demo";
+
+const STATIC_EXPORT = process.env.NEXT_PUBLIC_STATIC_EXPORT === "1";
+const LEAD_EMAIL = (process.env.NEXT_PUBLIC_LEAD_EMAIL ?? "").trim();
+const LEAD_ENDPOINT = (process.env.NEXT_PUBLIC_LEAD_ENDPOINT ?? "").trim();
 
 export function LeadForm({
   contour,
@@ -50,8 +62,87 @@ export function LeadForm({
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    setStatus("sending");
+    // Honeypot работает в любом режиме: ботам не подсказываем,
+    // что заявка никуда не ушла.
+    if (String(data.get("website") ?? "") !== "") {
+      setStatus("success");
+      form.reset();
+      return;
+    }
+
     setError(null);
+
+    /*
+      Статическая сборка: без своего сервера. Внешний приёмник
+      или почтовый клиент, иначе честная витрина.
+    */
+    if (STATIC_EXPORT) {
+      const payload = {
+        name: String(data.get("name") ?? "").trim(),
+        contact: String(data.get("contact") ?? "").trim(),
+        message: String(data.get("message") ?? "").trim(),
+        elapsedMs: Date.now() - openedAt.current,
+        contour,
+        segment,
+        entryPoint,
+      };
+
+      if (LEAD_ENDPOINT) {
+        setStatus("sending");
+        try {
+          const res = await fetch(LEAD_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const json = (await res.json().catch(() => null)) as
+            | { ok: boolean; error?: string }
+            | null;
+          if (res.ok && json?.ok) {
+            setStatus("success");
+            form.reset();
+            const w = window as unknown as { dataLayer?: unknown[] };
+            w.dataLayer?.push({ event: "nf_lead_sent", contour, segment, entryPoint });
+          } else {
+            setStatus("error");
+            setError(json?.error ?? FORM.errors.fallback);
+          }
+        } catch {
+          setStatus("error");
+          setError(FORM.errors.network);
+        }
+        return;
+      }
+
+      if (LEAD_EMAIL) {
+        const subject = `Заявка NarrativeFox: ${contour}${segment ? `, роль ${segment}` : ""}`;
+        const lines = [
+          `Имя: ${payload.name}`,
+          `Контакт для ответа: ${payload.contact}`,
+          "",
+          payload.message,
+          "",
+          `Точка входа: ${entryPoint}`,
+        ];
+        window.location.href =
+          `mailto:${LEAD_EMAIL}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(lines.join("\n"))}`;
+        setStatus("success");
+        form.reset();
+        const w = window as unknown as { dataLayer?: unknown[] };
+        w.dataLayer?.push({ event: "nf_lead_sent", contour, segment, entryPoint });
+        return;
+      }
+
+      // Приёмника нет: не делаем вид, что заявка ушла.
+      setStatus("demo");
+      const w = window as unknown as { dataLayer?: unknown[] };
+      w.dataLayer?.push({ event: "nf_lead_unavailable", contour, segment, entryPoint });
+      return;
+    }
+
+    setStatus("sending");
 
     try {
       const res = await fetch("/api/leads", {
@@ -126,11 +217,33 @@ export function LeadForm({
             <div className="flex h-full min-h-80 flex-col items-center justify-center text-center">
               <CheckCircle2 className="h-10 w-10 text-stone-500" aria-hidden="true" />
               <h3 className="font-display mt-5 text-xl font-semibold text-stone-900">
-                {FORM.successTitle}
+                {STATIC_EXPORT && LEAD_EMAIL && !LEAD_ENDPOINT
+                  ? FORM.static.mailtoTitle
+                  : FORM.successTitle}
               </h3>
               <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-stone-700">
-                {FORM.successText}
+                {STATIC_EXPORT && LEAD_EMAIL && !LEAD_ENDPOINT
+                  ? FORM.static.mailtoText
+                  : FORM.successText}
               </p>
+            </div>
+          ) : status === "demo" ? (
+            <div className="flex h-full min-h-80 flex-col items-center justify-center text-center">
+              <Inbox className="h-10 w-10 text-stone-400" aria-hidden="true" />
+              <h3 className="font-display mt-5 text-xl font-semibold text-stone-900">
+                {FORM.static.demoTitle}
+              </h3>
+              <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-stone-700">
+                {FORM.static.demoText}
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-6 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+                onClick={() => setStatus("idle")}
+              >
+                {FORM.static.demoBack}
+              </Button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5" noValidate={false}>

@@ -1,5 +1,9 @@
 import type { MetadataRoute } from "next";
 
+// Обязателен для output: "export" (GitHub Pages): карта сайта
+// генерируется один раз в момент сборки.
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {

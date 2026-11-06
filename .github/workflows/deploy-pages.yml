@@ -1,0 +1,87 @@
+name: Deploy to GitHub Pages
+
+# Автопубликация сайта: пуш в main, релиз или ручной запуск.
+# Собирает статический экспорт Next.js (out/) и выкладывает через
+# actions/deploy-pages. Домен narrativefox.tech привязан к Pages,
+# CNAME из корня репозитория копируется в артефакт, чтобы привязка
+# не слетела при деплое из воркфлоу.
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Pages в этом репозитории мог быть настроен на сборку из ветки
+      # (legacy). Деплой через actions/deploy-pages требует режим
+      # "GitHub Actions". Если режим ещё legacy, пробуем переключить
+      # через GITHUB_TOKEN; смена настроек сайта может быть запрещена
+      # политикой токена — тогда шаг не должен ломать сборку, финальную
+      # ошибку покажет actions/deploy-pages.
+      - name: Ensure Pages deploys via Actions
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api -X PUT repos/${{ github.repository }}/pages -f build_type=workflow
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Статический экспорт не умеет серверные API-роуты: каталог
+      # исключается только внутри CI-чекoutа, в репозитории API
+      # заявок остаётся для серверной сборки (bun run build).
+      - name: Build static export
+        env:
+          NEXT_OUTPUT: export
+          NEXT_PUBLIC_STATIC_EXPORT: "1"
+          # Приёмники заявок настраиваются переменными репозитория:
+          # Settings -> Secrets and variables -> Actions -> Variables.
+          NEXT_PUBLIC_LEAD_EMAIL: ${{ vars.LEAD_EMAIL }}
+          NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.LEAD_ENDPOINT }}
+        run: |
+          rm -rf src/app/api
+          bun run build:static
+
+      - name: Keep custom domain binding
+        run: test ! -f CNAME || cp CNAME out/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

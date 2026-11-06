@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { LeadForm } from "@/components/landing/lead-form";
+import { LegacyForRedirect } from "@/components/landing/legacy-redirect";
 import { Section, SectionHeader } from "@/components/landing/bits";
 import { Button } from "@/components/ui/button";
 import { GATEWAY_HERO, EXAMPLE_STEPS } from "@/lib/content/shared";
@@ -11,7 +11,6 @@ import {
   GATEWAY_FORK,
   GATEWAY_PILOT_FRAME,
   GATEWAY_EXAMPLE,
-  LEGACY_FOR_ROUTES,
 } from "@/lib/content/gateway";
 import { ArrowRight } from "lucide-react";
 
@@ -19,7 +18,8 @@ import { ArrowRight } from "lucide-react";
   Гейтвей-главная: рамка продукта, развилка контуров B2C и B2B,
   ядро механики, превью сквозного примера, рамка пилота и форма.
   Старые рекламные ссылки вида /?for=expert бесшовно ведут
-  в свой контур с предвыбранной ролью.
+  в свой контур с предвыбранной ролью (развитка на клиенте,
+  чтобы страница оставалась статической).
 */
 
 export const metadata: Metadata = {
@@ -35,20 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function GatewayPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-  const forParam = typeof params.for === "string" ? params.for : undefined;
-  const legacyRoute = forParam ? LEGACY_FOR_ROUTES[forParam] : undefined;
-  if (legacyRoute) {
-    redirect(legacyRoute);
-  }
-
+export default function GatewayPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <LegacyForRedirect />
       <SiteHeader />
       <main className="flex-1">
         {/* Hero: над-аудиторная рамка */}

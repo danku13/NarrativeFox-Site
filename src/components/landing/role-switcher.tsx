@@ -8,7 +8,8 @@ import type { RoleKey } from "@/lib/content/types";
   Переключатель роли внутри контура (/solo и /business).
   Выбор: состояние страницы + память на время посещения (localStorage)
   + событие в аналитику. Параметр role в URL нужен рекламным ссылкам:
-  он читается один раз на сервере и становится начальной ролью.
+  в серверной сборке его читал сервер, в статической он применяется
+  на клиенте сразу после монтирования и главнее сохранённого выбора.
 */
 
 interface RoleState {
@@ -22,18 +23,30 @@ export function RoleProvider({
   initialRole,
   storageKey,
   contour,
+  urlRoles,
   children,
 }: {
   initialRole: RoleKey;
   storageKey: string;
   contour: "solo" | "business";
+  urlRoles: RoleKey[];
   children: React.ReactNode;
 }) {
   const [role, setRoleState] = useState<RoleKey>(initialRole);
 
   // Память выбора на время посещения: подтягиваем после монтирования,
-  // чтобы не было расхождения гидратации.
+  // чтобы не было расхождения гидратации. Роль из адреса рекламной
+  // ссылки главнее: она отражает intent захода, а не прошлый визит.
   useEffect(() => {
+    try {
+      const urlRole = new URLSearchParams(window.location.search).get("role");
+      if (urlRole && urlRoles.includes(urlRole as RoleKey)) {
+        setRoleState(urlRole as RoleKey);
+        return;
+      }
+    } catch {
+      // параметр недоступен: работаем по сохранённому выбору
+    }
     try {
       const saved = window.localStorage.getItem(storageKey);
       if (saved) {
@@ -45,7 +58,7 @@ export function RoleProvider({
     } catch {
       // localStorage недоступен: просто работаем без памяти
     }
-  }, [storageKey]);
+  }, [storageKey, urlRoles]);
 
   function setRole(next: RoleKey) {
     setRoleState(next);

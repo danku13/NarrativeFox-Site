@@ -45,21 +45,21 @@ export const metadata: Metadata = {
 
 const VALID_ROLES: BusinessRole[] = ["b2b", "tech"];
 
-export default async function BusinessPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-  const params = await searchParams;
-  const roleParam = typeof params.role === "string" ? (params.role as BusinessRole) : undefined;
-  const initialRole =
-    roleParam && VALID_ROLES.includes(roleParam) ? roleParam : ("b2b" as BusinessRole);
-
+/*
+  Роль из рекламной ссылки (?role=) применяется на клиенте внутри
+  RoleProvider, поэтому страница остаётся статической.
+*/
+export default function BusinessPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="flex-1">
-        <RoleProvider initialRole={initialRole} storageKey="nf-business-role" contour="business">
+        <RoleProvider
+          initialRole={"b2b" as BusinessRole}
+          urlRoles={VALID_ROLES}
+          storageKey="nf-business-role"
+          contour="business"
+        >
           <ContourHero
             overline={BUSINESS_HERO.overline}
             h1Dark={BUSINESS_HERO.h1Dark}
