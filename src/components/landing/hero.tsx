@@ -32,9 +32,9 @@ export function Hero() {
             <span className="block text-stone-500">без целого отдела</span>
           </h1>
           <p className="mt-7 text-base leading-relaxed text-stone-700 sm:text-lg">
-            NarrativeFox превращает ваши интервью и материалы компании в
-            стратегию, публикации для разных площадок и регулярный разбор
-            того, какой отклик они дают. Тексты и ключевые решения
+            NarrativeFox превращает ваши голосовые сообщения, заметки
+            и документы в стратегию, публикации для разных площадок
+            и регулярный разбор отклика. Тексты и ключевые решения
             утверждаете вы, остальное делает система.
           </p>
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">

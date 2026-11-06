@@ -14,16 +14,25 @@ import {
 } from "lucide-react";
 
 /*
-  Сквозной пример (рекомендация 2.3): интервью, факты, карта публикаций,
-  адаптация под каналы, утверждение, отклик и выводы.
-  Честная подпись: пример собран на материале самого NarrativeFox,
-  это не клиентский кейс.
+  Сквозной пример (рекомендация 2.3): материалы клиента, факты, карта
+  публикаций, адаптация под каналы, утверждение, отклик и выводы.
+  Честность без плашки: одна фраза в лиде о том, что каналы NarrativeFox
+  ведёт сама система; артефакты подписаны именем основателя.
   Каждый шаг: текст слева, артефакт справа, шаги разделены 80px.
   Никаких слипшихся блоков: внутри карточек явные отступы.
 */
 
 const STEP_TITLE = "text-lg font-semibold text-stone-900";
 const STEP_TEXT = "mt-3 text-sm leading-relaxed text-stone-700 sm:text-base";
+
+/* Пять голосовых за день, суммарно 12 минут: систему интересуют все */
+const VOICE = [
+  { time: "1:24", w: "w-1/4" },
+  { time: "2:41", w: "w-2/5" },
+  { time: "0:47", w: "w-1/6" },
+  { time: "5:15", w: "w-3/5" },
+  { time: "1:52", w: "w-1/3" },
+] as const;
 
 export function ExampleSection() {
   return (
@@ -32,22 +41,20 @@ export function ExampleSection() {
         eyebrow="Пример работы системы"
         index="01"
         titleDark="Сквозной пример:"
-        titleMuted="от интервью до отклика"
+        titleMuted="от материалов до отклика"
         lead={
           <>
-            Один цикл целиком: что рассказал основатель, какие факты из
-            этого извлекла система, чем отличаются тексты для разных площадок,
-            что именно вы утверждаете и какой отклик это дало.
+            Один цикл целиком: что вы присылаете, какие факты из этого
+            извлекает система, чем отличаются тексты для разных площадок,
+            что именно вы утверждаете и какой отклик это дало. Мы сами
+            ведём каналы NarrativeFox этой системой, поэтому пример
+            показываем на собственном материале.
           </>
         }
       />
-      <p className="mt-6 max-w-2xl rounded-lg border border-stone-200 bg-white px-4 py-3 text-sm leading-relaxed text-stone-600">
-        Пример собран на материале самого NarrativeFox. Это демонстрация
-        того, как устроена система, а не клиентский кейс.
-      </p>
 
       <ol className="mt-14 space-y-16 md:space-y-20">
-        {/* Шаг 1: интервью */}
+        {/* Шаг 1: материалы клиента */}
         <li className="grid gap-8 border-t border-stone-200 pt-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
           <div>
             <div className="flex items-baseline gap-4">
@@ -57,29 +64,40 @@ export function ExampleSection() {
               >
                 01
               </span>
-              <h3 className={STEP_TITLE}>Интервью с основателем</h3>
+              <h3 className={STEP_TITLE}>Ваши материалы</h3>
             </div>
             <p className={STEP_TEXT}>
-              Разговор занимает около 30 минут. Расшифровка становится
-              исходным материалом: дальше в дело идут только факты из
-              неё и из документов компании, а не общие фразы о рынке.
+              Готовить ничего не нужно. Вы присылаете голосовые сообщения,
+              заметки, документы и таблицы, которые у вас уже есть.
+              Система расшифровывает звук и разбирает файлы. В дело идут
+              только факты, а не общие фразы о рынке.
             </p>
           </div>
           <Artifact
-            label="Расшифровка интервью"
-            meta="34 минуты · 8 400 знаков"
+            label="Расшифровка голосовых"
+            meta="5 сообщений · 12 минут"
             icon={<Mic className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />}
           >
             <div className="space-y-4">
-              <div className="flex items-center gap-3 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2.5">
-                <AudioLines className="h-4 w-4 text-stone-500" aria-hidden="true" />
-                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-stone-200">
-                  <div className="h-full w-2/5 rounded-full bg-stone-400" />
-                </div>
-                <span className="text-xs font-medium tabular-nums text-stone-500">
-                  12:40 / 34:00
-                </span>
-              </div>
+              <ul className="space-y-2" aria-label="Голосовые сообщения">
+                {VOICE.map((v) => (
+                  <li
+                    key={v.time}
+                    className="flex items-center gap-3 rounded-lg border border-stone-200 bg-stone-50 px-3 py-2"
+                  >
+                    <AudioLines
+                      className="h-4 w-4 shrink-0 text-stone-500"
+                      aria-hidden="true"
+                    />
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-stone-200">
+                      <div className={`h-full ${v.w} rounded-full bg-stone-400`} />
+                    </div>
+                    <span className="shrink-0 text-xs font-medium tabular-nums text-stone-500">
+                      {v.time}
+                    </span>
+                  </li>
+                ))}
+              </ul>
               <blockquote className="border-l-2 border-primary/60 pl-4">
                 <p className="text-sm leading-relaxed text-stone-800">
                   «Мы начинали с ручного ведения контента: канал вёл я сам и
@@ -89,7 +107,7 @@ export function ExampleSection() {
                   проверять, отчитываться».
                 </p>
                 <footer className="mt-3 text-xs font-medium text-stone-500">
-                  Интервью с основателем NarrativeFox
+                  Из голосового сообщения основателя NarrativeFox
                 </footer>
               </blockquote>
             </div>
@@ -109,7 +127,7 @@ export function ExampleSection() {
               <h3 className={STEP_TITLE}>Карточки фактов</h3>
             </div>
             <p className={STEP_TEXT}>
-              Система раскладывает интервью на отдельные факты. У каждого
+              Система раскладывает материалы на отдельные факты. У каждого
               факта есть источник и статус: «подтверждено» или
               «предположение». Предположения не попадают в тексты, пока вы их
               не проверите.
@@ -129,7 +147,7 @@ export function ExampleSection() {
                   <FactBadge kind="confirmed" />
                 </div>
                 <p className="mt-2 text-xs text-stone-500">
-                  Источник: интервью, 08:12
+                  Источник: голосовое, 1:12
                 </p>
               </li>
               <li className="rounded-lg border border-stone-200 p-3.5">
@@ -141,7 +159,7 @@ export function ExampleSection() {
                   <FactBadge kind="confirmed" />
                 </div>
                 <p className="mt-2 text-xs text-stone-500">
-                  Источник: интервью, 09:47
+                  Источник: внутренний документ
                 </p>
               </li>
               <li className="rounded-lg border border-stone-200 p-3.5">
@@ -469,8 +487,8 @@ export function ExampleSection() {
 
       <div className="mt-14 flex flex-col items-start gap-4 rounded-xl border border-stone-200 bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-xl text-sm leading-relaxed text-stone-700">
-          Так проходит один цикл: от интервью до отчёта и нового
-          плана. В пилоте то же самое повторится на вашем
+          Так проходит один цикл: от первого голосового до отчёта и
+          нового плана. В пилоте то же самое повторится на вашем
           материале и в ваших каналах.
         </p>
         <Button asChild variant="outline" className="shrink-0 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900">
