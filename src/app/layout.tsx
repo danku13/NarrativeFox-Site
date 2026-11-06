@@ -1,25 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const SITE_URL = "https://narrativefox.tech";
 
-const display = Playfair_Display({
-  variable: "--font-display",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-  style: ["normal", "italic"],
-});
-
-const body = Inter({
+const sansBody = Inter({
   variable: "--font-body",
   subsets: ["latin", "cyrillic"],
   display: "swap",
 });
 
-const TITLE = "NarrativeFox — агентская система продвижения";
+const sansDisplay = Manrope({
+  variable: "--font-display",
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+});
+
+const TITLE = "NarrativeFox: контент-маркетинг для B2B без целого отдела";
 const DESCRIPTION =
-  "Система ИИ-агентов ведёт контент-маркетинг вашего бизнеса: стратегия на фактах, тексты под 13+ площадок, публикации по расписанию. Решения остаются за вами.";
+  "NarrativeFox превращает ваши интервью и материалы компании в стратегию, публикации для разных площадок и регулярный разбор того, какой отклик они дают. Тексты и ключевые решения утверждаете вы, остальное делает система.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -28,12 +28,11 @@ export const metadata: Metadata = {
   keywords: [
     "NarrativeFox",
     "контент-маркетинг",
+    "контент-маркетинг для B2B",
     "ИИ-агенты",
-    "продвижение бизнеса",
     "Telegram",
-    "VC.ru",
     "Хабр",
-    "Дзен",
+    "VC.ru",
   ],
   authors: [{ name: "Daniel Kuzmichev" }],
   alternates: {
@@ -41,7 +40,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: TITLE,
-    description: DESCRIPTION,
+    description:
+      "Интервью и материалы компании превращаются в стратегию, публикации для площадок и разбор отклика. Решения утверждаете вы, остальное делает система.",
     type: "website",
     locale: "ru_RU",
     url: SITE_URL,
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "NarrativeFox — система ИИ-агентов ведёт ваш маркетинг. Решения — за вами.",
+        alt: "NarrativeFox: контент-маркетинг для B2B без целого отдела",
       },
     ],
   },
@@ -77,18 +77,8 @@ const orgJsonLd = {
   founder: {
     "@type": "Person",
     name: "Daniel Kuzmichev",
-    url: "https://t.me/danku13",
   },
-  sameAs: ["https://t.me/danku13"],
 };
-
-/**
- * До отрисовки помечаем документ классом `js`: CSS прячет .reveal только
- * при работающем JS. Если гидрация не случится за 3 секунды — класс
- * снимается, и контент появляется статично (страховка от «вечной
- * невидимости» секций при сбойном бандле).
- */
-const jsClassScript = `document.documentElement.classList.add("js");setTimeout(function(){document.documentElement.classList.contains("reveal-ready")||document.documentElement.classList.remove("js")},3e3);`;
 
 export default function RootLayout({
   children,
@@ -96,14 +86,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: jsClassScript }} />
-      </head>
+    <html lang="ru">
       <body
-        className={`${display.variable} ${body.variable} antialiased bg-background text-foreground`}
+        className={`${sansBody.variable} ${sansDisplay.variable} antialiased font-sans`}
       >
         {children}
+        <Toaster />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}

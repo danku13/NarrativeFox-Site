@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Заявки с посадочной страницы. Единственный защищённый канал связи:
+// форма с антиспам-проверкой, без публичной почты и личных контактов.
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  contact   String
+  message   String
+  source    String?  @default("landing")
+  createdAt DateTime @default(now())
+}
