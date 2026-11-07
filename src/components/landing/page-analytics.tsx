@@ -6,7 +6,8 @@ import { track } from "@/lib/analytics";
 /*
   События чтения и кликов на всех страницах сайта:
   - nf_section_view: секция с id впервые попала в вьюпорт;
-  - nf_cta_click: клик по ссылке, ведущей к форме или в другой маршрут.
+  - nf_cta_click: клик по ссылке, ведущей к форме, в другой маршрут
+    или в Telegram-канал проекта.
   Подключается один раз на страницу, параметры: путь страницы.
 */
 
@@ -42,6 +43,7 @@ export function PageAnalytics({ page }: { page: string }) {
       const href = anchor.getAttribute("href") ?? "";
       const isCta =
         href.includes("#contact") ||
+        href.includes("t.me/") ||
         CTA_PREFIXES.some((p) => href === p || href.startsWith(`${p}?`));
       if (!isCta) return;
       track("nf_cta_click", {

@@ -244,14 +244,26 @@ export function LeadForm({
               <p className="mt-2.5 max-w-sm text-sm leading-relaxed text-stone-700">
                 {FORM.static.demoText}
               </p>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-6 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-                onClick={() => setStatus("idle")}
-              >
-                {FORM.static.demoBack}
-              </Button>
+              <div className="mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row">
+                <Button asChild className="font-semibold">
+                  <a
+                    href={FORM.static.demoLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => track("nf_telegram_click", { contour, segment, entryPoint })}
+                  >
+                    {FORM.static.demoCta}
+                  </a>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+                  onClick={() => setStatus("idle")}
+                >
+                  {FORM.static.demoBack}
+                </Button>
+              </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} onFocusCapture={handleFirstFocus} className="space-y-5" noValidate={false}>

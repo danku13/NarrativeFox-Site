@@ -2,36 +2,31 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
 import { PageAnalytics } from "@/components/landing/page-analytics";
-import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { LeadForm } from "@/components/landing/lead-form";
 import { LegacyForRedirect } from "@/components/landing/legacy-redirect";
 import { Section, SectionHeader } from "@/components/landing/bits";
 import { Button } from "@/components/ui/button";
-import { GATEWAY_HERO, EXAMPLE_STEPS } from "@/lib/content/shared";
-import {
-  GATEWAY_FORK,
-  GATEWAY_PILOT_FRAME,
-  GATEWAY_EXAMPLE,
-} from "@/lib/content/gateway";
+import { GATEWAY_HERO, VALUE_STRIP, MECHANICS_BRIDGE } from "@/lib/content/shared";
+import { GATEWAY_FORK, GATEWAY_PILOT_FRAME } from "@/lib/content/gateway";
 import { ArrowRight } from "lucide-react";
 
 /*
-  Гейтвей-главная: рамка продукта, развилка контуров B2C и B2B,
-  ядро механики, превью сквозного примера, рамка пилота и форма.
-  Старые рекламные ссылки вида /?for=expert бесшовно ведут
-  в свой контур с предвыбранной ролью (развитка на клиенте,
-  чтобы страница оставалась статической).
+  Гейтвей-главная: оффер в единицах посетителя, развилка контуров,
+  полоса доказательств ценности, рамка пилота и форма.
+  Механика («как работает») живёт отдельно на /how-it-works,
+  здесь только однострочный мост. Старые рекламные ссылки вида
+  /?for=expert ведут в свой контур с предвыбранной ролью.
 */
 
 export const metadata: Metadata = {
-  title: "NarrativeFox: контент-маркетинг ведёт система, вы направляете",
+  title: "NarrativeFox: регулярные публикации в вашем тоне, без вечеров над текстами",
   description:
-    "Присылаете голосовые, заметки и документы. NarrativeFox сам собирает стратегию и цепочки публикаций, готовит тексты для площадок, разбирает отклик и учится на ваших решениях. Ваша задача: направлять.",
+    "Голосовые и заметки на входе. План, черновики и расписание на ваших каналах на выходе, отклик разбирается по итогам цикла. Решения и утверждение каждого текста за вами.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "NarrativeFox: маркетинг ведёт система",
+    title: "NarrativeFox: публикации идут, вечера остаются вашими",
     description:
-      "Голосовые и заметки на входе. Стратегия, тексты и расписание на выходе. Ничего не выходит без вашего утверждения.",
+      "Система ведёт контент-маркетинг из ваших материалов: план, тексты в вашем тоне, расписание, разбор отклика. Утверждение каждого текста за вами.",
     url: "/",
   },
 };
@@ -43,7 +38,7 @@ export default function GatewayPage() {
       <SiteHeader />
       <PageAnalytics page="/" />
       <main className="flex-1">
-        {/* Hero: над-аудиторная рамка */}
+        {/* Hero: оффер в единицах посетителя */}
         <section id="top" className="border-b border-stone-200/60 bg-background">
           <div className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 md:py-28">
             <div className="max-w-3xl">
@@ -123,42 +118,59 @@ export default function GatewayPage() {
           </div>
         </Section>
 
-        {/* Ядро механики: конвейер, списки, принципы, сравнение, цифры */}
-        <HowItWorksSection />
-
-        {/* Превью сквозного примера */}
-        <Section id="example-preview">
+        {/* Полоса доказательств ценности */}
+        <Section id="value">
           <SectionHeader
-            eyebrow={GATEWAY_EXAMPLE.eyebrow}
-            titleDark={GATEWAY_EXAMPLE.titleDark}
-            titleMuted={GATEWAY_EXAMPLE.titleMuted}
-            lead={GATEWAY_EXAMPLE.lead}
+            eyebrow={VALUE_STRIP.eyebrow}
+            titleDark={VALUE_STRIP.titleDark}
+            titleMuted={VALUE_STRIP.titleMuted}
           />
-          <ol className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {EXAMPLE_STEPS.map((step) => (
-              <li key={step.n} className="rounded-xl border border-stone-200 bg-white p-5">
-                <p className="font-display text-2xl font-semibold leading-none text-stone-300">
-                  {step.n}
-                </p>
-                <h3 className="mt-3 text-sm font-semibold text-stone-900">{step.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-stone-600">{step.text}</p>
-              </li>
+          <dl className="mt-12 grid gap-6 lg:grid-cols-3">
+            {VALUE_STRIP.items.map((v) => (
+              <div key={v.label} className="rounded-xl border border-stone-200 bg-white p-6">
+                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                  {v.label}
+                </dt>
+                <dd className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
+                  {v.value}
+                </dd>
+                <dd className="mt-3 text-sm leading-relaxed text-stone-600">{v.desc}</dd>
+                {v.href ? (
+                  <dd className="mt-4">
+                    <a
+                      href={v.href}
+                      target={v.href.startsWith("http") ? "_blank" : undefined}
+                      rel={v.href.startsWith("http") ? "noreferrer" : undefined}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
+                    >
+                      {v.linkLabel}
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </dd>
+                ) : null}
+              </div>
             ))}
-          </ol>
-          <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-stone-200 bg-white p-6 sm:flex-row sm:items-center">
-            <p className="text-xs leading-relaxed text-stone-500">{GATEWAY_EXAMPLE.note}</p>
+          </dl>
+        </Section>
+
+        {/* Мост к механике: весь «как работает» на отдельной странице */}
+        <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-stone-50 py-12 md:py-14">
+          <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-5 px-4 sm:flex-row sm:items-center sm:px-6">
+            <p className="max-w-2xl text-sm leading-relaxed text-stone-600">
+              {MECHANICS_BRIDGE.text}
+            </p>
             <Button
               asChild
               variant="outline"
               className="shrink-0 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
             >
-              <a href="/how-it-works">
-                {GATEWAY_EXAMPLE.link}
+              <a href={MECHANICS_BRIDGE.href}>
+                {MECHANICS_BRIDGE.link}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
             </Button>
           </div>
-        </Section>
+        </section>
 
         {/* Рамка пилота */}
         <Section id="pilot-frame" tone="muted">
