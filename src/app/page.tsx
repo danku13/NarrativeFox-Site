@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
+import { PageAnalytics } from "@/components/landing/page-analytics";
 import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { LeadForm } from "@/components/landing/lead-form";
 import { LegacyForRedirect } from "@/components/landing/legacy-redirect";
@@ -40,6 +41,7 @@ export default function GatewayPage() {
     <div className="flex min-h-screen flex-col bg-background">
       <LegacyForRedirect />
       <SiteHeader />
+      <PageAnalytics page="/" />
       <main className="flex-1">
         {/* Hero: над-аудиторная рамка */}
         <section id="top" className="border-b border-stone-200/60 bg-background">

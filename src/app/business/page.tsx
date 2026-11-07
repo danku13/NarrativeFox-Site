@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
+import { PageAnalytics } from "@/components/landing/page-analytics";
 import { RoleProvider } from "@/components/landing/role-switcher";
 import { ContourHero } from "@/components/landing/hero-contour";
 import {
@@ -53,6 +54,7 @@ export default function BusinessPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
+      <PageAnalytics page="/business" />
       <main className="flex-1">
         <RoleProvider
           initialRole={"b2b" as BusinessRole}

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, CheckCircle2, Loader2, Inbox } from "lucide-react";
 import { FORM } from "@/lib/content/shared";
+import { track } from "@/lib/analytics";
 import type { Contour, EntryPoint, SegmentContent, SegmentState } from "@/lib/content/types";
 import { useRole } from "./role-switcher";
 
@@ -52,10 +53,17 @@ export function LeadForm({
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const openedAt = useRef<number>(0);
+  const started = useRef(false);
 
   useEffect(() => {
     openedAt.current = Date.now();
   }, []);
+
+  function handleFirstFocus() {
+    if (started.current) return;
+    started.current = true;
+    track("nf_lead_start", { contour, segment, entryPoint });
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,15 +109,16 @@ export function LeadForm({
           if (res.ok && json?.ok) {
             setStatus("success");
             form.reset();
-            const w = window as unknown as { dataLayer?: unknown[] };
-            w.dataLayer?.push({ event: "nf_lead_sent", contour, segment, entryPoint });
+            track("nf_lead_sent", { contour, segment, entryPoint });
           } else {
             setStatus("error");
             setError(json?.error ?? FORM.errors.fallback);
+            track("nf_lead_error", { contour, segment, entryPoint, reason: "endpoint_rejected" });
           }
         } catch {
           setStatus("error");
           setError(FORM.errors.network);
+          track("nf_lead_error", { contour, segment, entryPoint, reason: "network" });
         }
         return;
       }
@@ -130,15 +139,13 @@ export function LeadForm({
           `&body=${encodeURIComponent(lines.join("\n"))}`;
         setStatus("success");
         form.reset();
-        const w = window as unknown as { dataLayer?: unknown[] };
-        w.dataLayer?.push({ event: "nf_lead_sent", contour, segment, entryPoint });
+        track("nf_lead_sent", { contour, segment, entryPoint });
         return;
       }
 
       // Приёмника нет: не делаем вид, что заявка ушла.
       setStatus("demo");
-      const w = window as unknown as { dataLayer?: unknown[] };
-      w.dataLayer?.push({ event: "nf_lead_unavailable", contour, segment, entryPoint });
+      track("nf_lead_unavailable", { contour, segment, entryPoint });
       return;
     }
 
@@ -166,15 +173,16 @@ export function LeadForm({
       if (res.ok && json?.ok) {
         setStatus("success");
         form.reset();
-        const w = window as unknown as { dataLayer?: unknown[] };
-        w.dataLayer?.push({ event: "nf_lead_sent", contour, segment, entryPoint });
+        track("nf_lead_sent", { contour, segment, entryPoint });
       } else {
         setStatus("error");
         setError(json?.error ?? FORM.errors.fallback);
+        track("nf_lead_error", { contour, segment, entryPoint, reason: "server_rejected" });
       }
     } catch {
       setStatus("error");
       setError(FORM.errors.network);
+      track("nf_lead_error", { contour, segment, entryPoint, reason: "network" });
     }
   }
 
@@ -246,7 +254,7 @@ export function LeadForm({
               </Button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5" noValidate={false}>
+            <form onSubmit={handleSubmit} onFocusCapture={handleFirstFocus} className="space-y-5" noValidate={false}>
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium text-stone-800">
                   {FORM.labels.name}

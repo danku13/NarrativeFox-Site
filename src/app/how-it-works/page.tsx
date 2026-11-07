@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
+import { PageAnalytics } from "@/components/landing/page-analytics";
 import { ExampleSection } from "@/components/landing/example";
 import { LeadForm } from "@/components/landing/lead-form";
 
@@ -26,6 +27,7 @@ export default function HowItWorksPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
+      <PageAnalytics page="/how-it-works" />
       <main className="flex-1">
         <ExampleSection />
         <LeadForm
