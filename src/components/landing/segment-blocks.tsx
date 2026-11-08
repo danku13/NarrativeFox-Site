@@ -179,7 +179,7 @@ export function SegmentTrust({
           eyebrow="Возражения и ответы"
           titleDark="Честные ответы"
           titleMuted="на главные сомнения"
-          lead="Сомнения, которые звучат чаще всего. Отвечаем прямо, без маркетингового тумана."
+          lead="Сомнения, которые звучат чаще всего. Отвечаем прямо."
         />
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {segment.objections.map((item) => (
@@ -202,7 +202,7 @@ export function SegmentTrust({
             Кому не подойдёт
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-stone-700">
-            Честные ограничения лучше узнать до пилота, а не после.
+            Эти ограничения лучше узнать до пилота.
           </p>
           <ul className="mt-8 grid gap-x-8 gap-y-10 md:grid-cols-3">
             {notFit.map((n, i) => (
