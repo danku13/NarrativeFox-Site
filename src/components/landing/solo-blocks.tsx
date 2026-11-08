@@ -1,10 +1,11 @@
 import { Section, SectionHeader, Artifact, FactBadge } from "./bits";
 import { Mic, FileText, Table2, ArrowRight, AudioLines } from "lucide-react";
-import { BEFORE_AFTER, VOICE_EXAMPLE } from "@/lib/content/solo-content";
+import { BEFORE_AFTER, VISIBILITY_CHAIN, VOICE_EXAMPLE } from "@/lib/content/solo-content";
 
 /*
   Контурные блоки B2C (/solo): контраст «до и после» на уровне
-  личного ритма жизни и микро-пример живой трансформации речи.
+  личного ритма жизни, цепочка видимости от материала к обращениям
+  и микро-пример живой трансформации речи.
 */
 
 export function BeforeAfterSection() {
@@ -46,9 +47,39 @@ export function BeforeAfterSection() {
   );
 }
 
+export function VisibilityChainSection() {
+  return (
+    <Section id="visibility" tone="muted">
+      <SectionHeader
+        eyebrow={VISIBILITY_CHAIN.eyebrow}
+        titleDark={VISIBILITY_CHAIN.titleDark}
+        titleMuted={VISIBILITY_CHAIN.titleMuted}
+        lead={VISIBILITY_CHAIN.lead}
+      />
+      <ol className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {VISIBILITY_CHAIN.steps.map((step, i) => (
+          <li key={step.title} className="relative rounded-xl border border-stone-200 bg-white p-6">
+            <p className="font-display text-2xl font-semibold leading-none text-stone-300">
+              {String(i + 1).padStart(2, "0")}
+            </p>
+            <h3 className="mt-3 text-sm font-semibold text-stone-900">{step.title}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-stone-600">{step.text}</p>
+            {i < VISIBILITY_CHAIN.steps.length - 1 ? (
+              <ArrowRight
+                className="absolute -right-4 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-stone-300 lg:block"
+                aria-hidden="true"
+              />
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </Section>
+  );
+}
+
 export function VoiceExampleSection() {
   return (
-    <Section id="voice-example" tone="muted">
+    <Section id="voice-example">
       <SectionHeader
         eyebrow={VOICE_EXAMPLE.eyebrow}
         titleDark={VOICE_EXAMPLE.titleDark}

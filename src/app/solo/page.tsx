@@ -6,36 +6,43 @@ import { RoleProvider } from "@/components/landing/role-switcher";
 import { ContourHero } from "@/components/landing/hero-contour";
 import {
   SegmentCase,
-  SegmentMirror,
   SegmentTrust,
   ChannelsLine,
 } from "@/components/landing/segment-blocks";
 import { SegmentFaq } from "@/components/landing/segment-faq";
-import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { FirstCycleSection } from "@/components/landing/first-cycle";
 import { PilotConditionsSection } from "@/components/landing/pilot";
-import { BeforeAfterSection, VoiceExampleSection } from "@/components/landing/solo-blocks";
+import {
+  BeforeAfterSection,
+  VisibilityChainSection,
+  VoiceExampleSection,
+} from "@/components/landing/solo-blocks";
 import { TariffsSection } from "@/components/landing/tariffs";
 import { SegmentedLeadForm } from "@/components/landing/lead-form";
+import { Button } from "@/components/ui/button";
 import { SOLO_HERO, SOLO_SEGMENTS } from "@/lib/content/solo-content";
+import { MECHANICS_BRIDGE } from "@/lib/content/shared";
+import { ArrowRight } from "lucide-react";
 import type { SoloRole } from "@/lib/content/types";
 
 /*
   Контур B2C (/solo): эксперты и мастера (дефолт), блогеры и авторы.
-  Порядок: hero с чипами, до и после, живой пример речи, кейс,
-  узнавание, что меняется, механика, доверие, первый цикл,
+  Страница продаёт ценность: время, регулярность, видимость.
+  Механика («как работает») живёт на /how-it-works, здесь мост.
+  Порядок: hero, неделя до и после, цепочка видимости, живой пример,
+  кейс, ситуации и возражения, мост к механике, первый цикл,
   пилот и тарифы, вопросы, форма.
 */
 
 export const metadata: Metadata = {
-  title: "NarrativeFox для экспертов, мастеров и авторов: публикации без вечеров над текстом",
+  title: "NarrativeFox для экспертов, мастеров и авторов: регулярный контент без вечеров",
   description:
-    "Наговаривайте голосовые и скидывайте заметки: система сама достаёт темы, держит расписание и пишет черновики в вашей манере речи. Ничего не выходит без вашего утверждения.",
+    "Голосовые и заметки становятся публикациями по расписанию в вашем тоне. Канал живёт ровно, видимость растёт за пределы сарафанного радио, утверждение каждого текста за вами.",
   alternates: { canonical: "/solo" },
   openGraph: {
-    title: "NarrativeFox: займитесь делом, рутину публикаций ведёт система",
+    title: "NarrativeFox: контент выходит регулярно, ваше время остаётся вашим",
     description:
-      "Для сольных практик, мастеров и авторов. Живой тон, регулярность без выгорания, 15-30 минут в неделю.",
+      "Для сольных практик, мастеров и авторов. Живой тон, регулярность без выгорания, участие от 15-30 минут в неделю по оценке первых циклов.",
     url: "/solo",
   },
 };
@@ -70,11 +77,30 @@ export default function SoloPage() {
             segments={SOLO_SEGMENTS}
           />
           <BeforeAfterSection />
+          <VisibilityChainSection />
           <VoiceExampleSection />
           <SegmentCase segments={SOLO_SEGMENTS} />
-          <SegmentMirror segments={SOLO_SEGMENTS} />
-          <HowItWorksSection index="05" />
           <SegmentTrust segments={SOLO_SEGMENTS} />
+
+          {/* Мост к механике: весь «как работает» на отдельной странице */}
+          <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-stone-50 py-12 md:py-14">
+            <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-5 px-4 sm:flex-row sm:items-center sm:px-6">
+              <p className="max-w-2xl text-sm leading-relaxed text-stone-600">
+                {MECHANICS_BRIDGE.text}
+              </p>
+              <Button
+                asChild
+                variant="outline"
+                className="shrink-0 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+              >
+                <a href={MECHANICS_BRIDGE.href}>
+                  {MECHANICS_BRIDGE.link}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
+          </section>
+
           <FirstCycleSection index="07" />
           <ChannelsLine segments={SOLO_SEGMENTS} />
           <PilotConditionsSection ctaLabel="Обсудить пилот" />
