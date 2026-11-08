@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
+import { PageAnalytics } from "@/components/landing/page-analytics";
 import { Section, SectionHeader } from "@/components/landing/bits";
 import { PilotConditionsSection, PilotNotFitSection } from "@/components/landing/pilot";
 import { TariffsSection } from "@/components/landing/tariffs";
@@ -41,6 +42,7 @@ export default function PilotPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
+      <PageAnalytics page="/pilot" />
       <main className="flex-1">
         {/* Заголовок страницы */}
         <Section id="pilot-top" tone="muted" className="pb-0 md:pb-0">

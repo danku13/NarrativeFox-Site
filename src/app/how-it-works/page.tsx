@@ -1,23 +1,29 @@
 import type { Metadata } from "next";
 import { SiteHeader } from "@/components/landing/header";
 import { SiteFooter } from "@/components/landing/footer";
+import { PageAnalytics } from "@/components/landing/page-analytics";
+import { HowItWorksSection } from "@/components/landing/how-it-works";
 import { ExampleSection } from "@/components/landing/example";
 import { LeadForm } from "@/components/landing/lead-form";
 
 /*
-  /how-it-works: полный разбор конвейера на сквозном примере
-  из шести шагов с наполненными мокапами артефактов.
+  /how-it-works: вся механика системы в одном месте.
+  Сначала конвейер и разделение ролей (что делает система,
+  что решает человек, принципы, сравнение с чат-ботом, цифры),
+  затем сквозной пример из шести шагов с мокапами артефактов
+  на материале самого NarrativeFox. Со страниц офферов сюда
+  ведёт однострочный мост.
 */
 
 export const metadata: Metadata = {
-  title: "Как устроена система NarrativeFox: сквозной пример от материалов до отклика",
+  title: "Как устроена система NarrativeFox: конвейер, роли и сквозной пример",
   description:
-    "Шесть шагов работы системы на материале самого NarrativeFox: приём материалов, база фактов с источниками и статусами, карта цикла, проверка на ИИ-штампы, утверждение с памятью решений, вывод цикла.",
+    "Механика целиком: конвейер этапов, база фактов с источниками, что делает система и что решает человек, сравнение с разовыми запросами в чат и сквозной пример цикла из шести шагов.",
   alternates: { canonical: "/how-it-works" },
   openGraph: {
-    title: "NarrativeFox: один цикл целиком, от материалов до отклика",
+    title: "NarrativeFox: как система ведёт цикл, от материалов до отклика",
     description:
-      "Сквозной пример с артефактами: что присылаете, какие факты извлекаются, что перехватывает проверка и что утверждает человек.",
+      "Конвейер, роли человека и системы, принципы, проверка формулировок и сквозной пример с артефактами на собственном материале.",
     url: "/how-it-works",
   },
 };
@@ -26,7 +32,9 @@ export default function HowItWorksPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
+      <PageAnalytics page="/how-it-works" />
       <main className="flex-1">
+        <HowItWorksSection />
         <ExampleSection />
         <LeadForm
           contour="gateway"
