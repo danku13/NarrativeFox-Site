@@ -4,9 +4,9 @@ import { ClipboardList, Scale, ArrowRight, Ban } from "lucide-react";
 import { PILOT } from "@/lib/content/shared";
 
 /*
-  Состав и условия пилота [БАЗА]. Цены сервиса нет: стоимость по запросу,
-  смета фиксируется до старта. Тарифы B2C и разбор экономики B2B
-  живут в отдельных секциях контуров.
+  Состав и условия пилота [БАЗА]. Сетка тарифов B2C, разбор экономики
+  B2B и смета по кейсу живут в отдельных секциях контуров
+  (src/components/landing/tariffs.tsx и business-blocks.tsx).
 */
 
 export function PilotConditionsSection({

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, CheckCircle2, Loader2, Inbox } from "lucide-react";
 import { FORM } from "@/lib/content/shared";
+import { APP_LINKS } from "@/lib/content/site-meta";
 import { track } from "@/lib/analytics";
 import type { Contour, EntryPoint, SegmentContent, SegmentState } from "@/lib/content/types";
 import { useRole } from "./role-switcher";
@@ -345,6 +346,33 @@ export function LeadForm({
                   </>
                 )}
               </Button>
+              {/*
+                Согласие на обработку данных: без него форма на сайте нарушает
+                152-ФЗ. Строка стоит под кнопкой, где её ищет и посетитель,
+                и модератор платёжного сервиса. Ссылки ведут на документы
+                в приложении.
+              */}
+              <p className="text-center text-xs leading-relaxed text-stone-500">
+                Отправляя форму, вы соглашаетесь с{" "}
+                <a
+                  href={APP_LINKS.privacy}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-stone-800"
+                >
+                  политикой обработки персональных данных
+                </a>{" "}
+                и{" "}
+                <a
+                  href={APP_LINKS.offer}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-stone-800"
+                >
+                  офертой
+                </a>
+                .
+              </p>
               <p className="text-center text-xs leading-relaxed text-stone-500">
                 {FORM.privacy}
               </p>

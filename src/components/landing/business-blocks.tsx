@@ -11,7 +11,8 @@ import {
 /*
   Контурные блоки B2B (/business): три уровня верификации,
   микро-пример «от фактуры к цепочке касаний», экономика
-  и блок «стоимость по кейсу» вместо прайса.
+  и блок «стоимость по кейсу»: у B2B смета под задачу, общая сетка
+  тарифов показывается отдельным блоком (src/components/landing/tariffs.tsx).
 */
 
 const LEVEL_ICONS = [Database, ShieldCheck, Filter];
@@ -118,7 +119,7 @@ export function BusinessEconomicsSection() {
         eyebrow={BUSINESS_ECONOMICS.eyebrow}
         titleDark={BUSINESS_ECONOMICS.titleDark}
         titleMuted={BUSINESS_ECONOMICS.titleMuted}
-        lead="Цикл системы не имеет фиксированного прайса: смета собирается под кейс. Ориентиры ниже помогают понять, с чем её сравнивать."
+        lead="Смета для B2B собирается под кейс. Ориентиры ниже помогают понять, с чем её сравнивать."
       />
       <div className="mt-12 grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
@@ -181,7 +182,10 @@ export function BusinessEconomicsSection() {
   );
 }
 
-/* Вместо прайса: заявка на разбор кейса. */
+/*
+  Смета по кейсу: заявка на разбор.
+  Общая сетка тарифов стоит рядом отдельным блоком TariffsSection.
+*/
 export function BusinessPricingSection({
   compact = false,
 }: {

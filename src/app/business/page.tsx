@@ -19,6 +19,7 @@ import {
   BusinessEconomicsSection,
   BusinessPricingSection,
 } from "@/components/landing/business-blocks";
+import { TariffsSection } from "@/components/landing/tariffs";
 import { SegmentedLeadForm } from "@/components/landing/lead-form";
 import { Button } from "@/components/ui/button";
 import { BUSINESS_HERO, BUSINESS_SEGMENTS } from "@/lib/content/business-content";
@@ -105,6 +106,8 @@ export default function BusinessPage() {
           <ChannelsLine segments={BUSINESS_SEGMENTS} />
           <PilotConditionsSection ctaLabel="Обсудить кейс" />
           <BusinessPricingSection />
+          {/* Общая сетка тарифов: те же цены, что на /solo и в приложении */}
+          <TariffsSection />
           <SegmentFaq segments={BUSINESS_SEGMENTS} />
           <SegmentedLeadForm
             contour="business"

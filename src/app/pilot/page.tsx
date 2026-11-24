@@ -21,19 +21,23 @@ import { ArrowRight } from "lucide-react";
   разбор экономики и стоимость по кейсу. Без параметра показана
   развилка с подписями: страница самодостаточна для прямого входа.
   Выбор контура читается на клиенте (PilotContourView), поэтому
-  страница остаётся статической. Цена сервиса нигде не указана:
-  только по запросу.
+  страница остаётся статической.
+
+  Цены B2C показаны открыто: сетка тарифов одна для /solo, /business
+  и /pilot, цифры приходят из src/lib/content/tariffs.ts. Для B2B
+  цена по-прежнему собирается под кейс, потому что зависит от объёма
+  исследования и приватности.
 */
 
 export const metadata: Metadata = {
-  title: "Пилот NarrativeFox: один цикл за четыре недели, стоимость по запросу",
+  title: "Пилот NarrativeFox: один цикл за четыре недели и тарифы",
   description:
-    "Состав пилота: 4 недели, 2-3 ваших канала, 6-9 публикаций, около часа на старте и 15-30 минут в неделю. Смета фиксируется до старта. Тарифы для сольных практик и авторов, для компаний расчёт по кейсу.",
+    "Состав пилота: 4 недели, 2-3 ваших канала, 6-9 публикаций, около часа на старте и 15-30 минут в неделю. Тарифы от 2 490 ₽ в месяц, оплата картой или через СБП. Для компаний смета собирается по кейсу.",
   alternates: { canonical: "/pilot" },
   openGraph: {
     title: "NarrativeFox: условия пилота и тарифы",
     description:
-      "Один полный цикл за четыре недели. Стоимость по запросу, смета фиксируется до старта.",
+      "Один полный цикл за четыре недели. Тарифы от 2 490 ₽ в месяц, оплата картой или через СБП.",
     url: "/pilot",
   },
 };
@@ -67,59 +71,63 @@ export default function PilotPage() {
             </>
           }
           all={
-            <Section id="pricing-fork" tone="muted">
-              <SectionHeader
-                eyebrow="Стоимость"
-                titleDark="Два пути уточнения цены:"
-                titleMuted="тариф или кейс"
-                lead="Фиксированного прайса нет. Для сольных практик и авторов действует сетка тарифов по объёму. Для компаний и техно-продуктов смета собирается под кейс."
-              />
-              <div className="mt-12 grid gap-6 lg:grid-cols-2">
-                <div className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
-                    Контур 1 · B2C
-                  </p>
-                  <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
-                    Тарифы по объёму
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-stone-700">
-                    Эксперты, мастера, консультанты, авторы каналов и подкастов.
-                    Оси тарифа: активные проекты, площадки и частота публикаций.
-                    Цена каждого тарифа: по запросу, смета фиксируется до старта.
-                  </p>
-                  <div className="mt-6 flex flex-col gap-2 border-t border-stone-100 pt-6">
-                    <Button asChild className="font-semibold sm:self-start">
-                      <a href="/pilot?contour=solo">
-                        Посмотреть тарифы
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                      </a>
-                    </Button>
+            <>
+              {/* Сетка тарифов видна сразу: посетитель не гадает о цене */}
+              <TariffsSection />
+              <Section id="pricing-fork">
+                <SectionHeader
+                  eyebrow="Стоимость"
+                  titleDark="Тариф или смета:"
+                  titleMuted="зависит от контура"
+                  lead="Сетка выше действует для экспертов, авторов и небольших практик. Для компаний и техно-продуктов смета собирается под кейс: рядом ориентир штатной альтернативы с допущениями."
+                />
+                <div className="mt-12 grid gap-6 lg:grid-cols-2">
+                  <div className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
+                      Контур 1 · B2C
+                    </p>
+                    <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
+                      Сетка тарифов
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-stone-700">
+                      Эксперты, мастера, консультанты, авторы каналов и подкастов.
+                      Оси тарифа: площадки, частота публикаций и число циклов.
+                      Цены и лимиты в сетке выше, оплата картой или через СБП.
+                    </p>
+                    <div className="mt-6 flex flex-col gap-2 border-t border-stone-100 pt-6">
+                      <Button asChild className="font-semibold sm:self-start">
+                        <a href="/pilot?contour=solo">
+                          Посмотреть тарифы
+                          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
+                      Контур 2 · B2B
+                    </p>
+                    <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
+                      Смета по кейсу
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-stone-700">
+                      Консалтинговые и юридические практики, B2B-сервисы, SaaS
+                      и devtools. На смету влияют объём исследования, число
+                      каналов, приватность и глубина экспертизы. Рядом: ориентир
+                      штатной альтернативы, около 230 тысяч ₽ в месяц, с допущениями.
+                    </p>
+                    <div className="mt-6 flex flex-col gap-2 border-t border-stone-100 pt-6">
+                      <Button asChild className="font-semibold sm:self-start">
+                        <a href="/pilot?contour=business">
+                          Разобрать экономику кейса
+                          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                        </a>
+                      </Button>
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
-                    Контур 2 · B2B
-                  </p>
-                  <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
-                    Смета по кейсу
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-stone-700">
-                    Консалтинговые и юридические практики, B2B-сервисы, SaaS
-                    и devtools. На смету влияют объём исследования, число
-                    каналов, приватность и глубина экспертизы. Рядом: ориентир
-                    штатной альтернативы, около 230 тысяч ₽ в месяц, с допущениями.
-                  </p>
-                  <div className="mt-6 flex flex-col gap-2 border-t border-stone-100 pt-6">
-                    <Button asChild className="font-semibold sm:self-start">
-                      <a href="/pilot?contour=business">
-                        Разобрать экономику кейса
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Section>
+              </Section>
+            </>
           }
           soloForm={
             <LeadForm
