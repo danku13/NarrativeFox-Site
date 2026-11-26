@@ -4,57 +4,74 @@ import { SiteFooter } from "@/components/landing/footer";
 import { PageAnalytics } from "@/components/landing/page-analytics";
 import { LeadForm } from "@/components/landing/lead-form";
 import { LegacyForRedirect } from "@/components/landing/legacy-redirect";
-import { Section, SectionHeader } from "@/components/landing/bits";
+import { Artifact, Section, SectionHeader } from "@/components/landing/bits";
+import { BeforeAfterSection } from "@/components/landing/solo-blocks";
+import { FirstCycleSection } from "@/components/landing/first-cycle";
+import { TariffsSection } from "@/components/landing/tariffs";
+import { FaqSection } from "@/components/landing/faq";
 import { Button } from "@/components/ui/button";
-import { GATEWAY_HERO, VALUE_STRIP, MECHANICS_BRIDGE } from "@/lib/content/shared";
-import { GATEWAY_FORK, GATEWAY_PILOT_FRAME } from "@/lib/content/gateway";
-import { ArrowRight } from "lucide-react";
+import {
+  B2C_DEMO,
+  B2C_HERO,
+  B2C_PILOT_CTA,
+  B2C_PILOT_OFFER,
+  B2C_SCENARIOS,
+} from "@/lib/content/solo-content";
+import { MECHANICS_BRIDGE } from "@/lib/content/shared";
+import { ArrowRight, Check, CheckCircle2, FileText, Mic } from "lucide-react";
 
 /*
-  Гейтвей-главная: оффер в единицах посетителя, развилка контуров,
-  полоса доказательств ценности, рамка пилота и форма.
-  Механика («как работает») живёт отдельно на /how-it-works,
-  здесь только однострочный мост. Старые рекламные ссылки вида
-  /?for=expert ведут в свой контур с предвыбранной ролью.
+  Главная B2C-посадочная NarrativeFox:
+  один сценарий входа для независимых экспертов, мастеров и авторов.
+  Hero -> два B2C-сценария -> неделя до и после -> демонстрация продукта ->
+  мост к механике -> первый цикл -> пилот за 990 ₽ -> тарифная матрица ->
+  FAQ -> регистрация и оплата пилота.
 */
 
 export const metadata: Metadata = {
-  title: "NarrativeFox: регулярные публикации в вашем тоне, без вечеров над текстами",
+  title: "NarrativeFox: публикуйтесь регулярно, сохраняя свой голос",
   description:
-    "Голосовые и заметки на входе. План, черновики и расписание на ваших каналах на выходе, отклик разбирается по итогам цикла. Решения и утверждение каждого текста за вами.",
+    "NarrativeFox помогает превращать ваши идеи и материалы в черновики для разных площадок. Ничего не выходит без вашего утверждения. Пилот на 4 недели за 990 ₽.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "NarrativeFox: публикации идут, вечера остаются вашими",
+    title: "NarrativeFox: публикуйтесь регулярно, сохраняя свой голос",
     description:
-      "Система ведёт контент-маркетинг из ваших материалов: план, тексты в вашем тоне, расписание, разбор отклика. Утверждение каждого текста за вами.",
+      "Превращаем голосовые и заметки в черновики для разных площадок. Ничего не выходит без вашего утверждения. Пилот за 990 ₽.",
     url: "/",
   },
 };
 
-export default function GatewayPage() {
+export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <LegacyForRedirect />
       <SiteHeader />
       <PageAnalytics page="/" />
       <main className="flex-1">
-        {/* Hero: оффер в единицах посетителя */}
+        {/* Первый экран: B2C value proposition и CTA на пилот за 990 ₽ */}
         <section id="top" className="border-b border-stone-200/60 bg-background">
           <div className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 md:py-28">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
-                NarrativeFox · система контент-маркетинга
+                {B2C_HERO.overline}
               </p>
               <h1 className="font-display mt-6 text-[2.2rem] font-semibold leading-[1.06] tracking-tight text-stone-900 sm:text-[3rem] lg:text-[3.6rem]">
-                <span className="block">{GATEWAY_HERO.h1Dark}</span>
-                <span className="block text-stone-500">{GATEWAY_HERO.h1Muted}</span>
+                <span className="block">{B2C_HERO.h1Dark}</span>
+                <span className="block text-stone-500">{B2C_HERO.h1Muted}</span>
               </h1>
               <p className="mt-7 max-w-2xl text-base leading-relaxed text-stone-700 sm:text-lg">
-                {GATEWAY_HERO.lead}
+                {B2C_HERO.lead}
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <Button asChild size="lg" className="text-base font-semibold">
-                  <a href="#contact">{GATEWAY_HERO.ctaPrimary}</a>
+                  <a
+                    href={B2C_PILOT_CTA.href}
+                    target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
+                    rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
+                  >
+                    {B2C_HERO.ctaPrimary}
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
                 </Button>
                 <Button
                   asChild
@@ -62,99 +79,110 @@ export default function GatewayPage() {
                   variant="outline"
                   className="border-stone-300 text-base font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
                 >
-                  <a href="/how-it-works">{GATEWAY_HERO.ctaSecondary}</a>
+                  <a href="/how-it-works">{B2C_HERO.ctaSecondary}</a>
                 </Button>
               </div>
               <p className="mt-5 text-sm leading-relaxed text-stone-600">
-                {GATEWAY_HERO.micro}
+                {B2C_HERO.micro}
               </p>
             </div>
           </div>
         </section>
 
-        {/* Развилка контуров */}
-        <Section id="fork" tone="muted">
+        {/* Два B2C-сценария на одной странице без развилки на входе */}
+        <Section id="scenarios" tone="muted">
           <SectionHeader
-            eyebrow={GATEWAY_FORK.eyebrow}
-            titleDark={GATEWAY_FORK.titleDark}
-            titleMuted={GATEWAY_FORK.titleMuted}
-            lead={GATEWAY_FORK.lead}
+            eyebrow={B2C_SCENARIOS.eyebrow}
+            titleDark={B2C_SCENARIOS.titleDark}
+            titleMuted={B2C_SCENARIOS.titleMuted}
+            lead={B2C_SCENARIOS.lead}
           />
           <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            {GATEWAY_FORK.cards.map((card) => (
+            {B2C_SCENARIOS.items.map((item) => (
               <div
-                key={card.href}
+                key={item.title}
                 className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-400">
-                  {card.meta}
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                  {item.badge}
                 </p>
                 <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
-                  {card.title}
+                  {item.title}
                 </h3>
-                <p className="mt-3 text-sm font-medium text-stone-700">{card.roles}</p>
-                <p className="mt-3 text-sm leading-relaxed text-stone-600">{card.task}</p>
-                <div className="mt-6 flex flex-col gap-2.5 border-t border-stone-100 pt-6 sm:flex-row">
-                  {card.buttons.map((btn, i) => (
-                    <Button
-                      key={btn.href}
-                      asChild
-                      variant={i === 0 ? "default" : "outline"}
-                      className={
-                        i === 0
-                          ? "font-semibold"
-                          : "border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-                      }
-                    >
-                      <a href={btn.href}>
-                        {btn.label}
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                      </a>
-                    </Button>
+                <p className="mt-3 text-sm leading-relaxed text-stone-700">
+                  {item.summary}
+                </p>
+                <ul className="mt-6 space-y-3 border-t border-stone-100 pt-6">
+                  {item.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-stone-700">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-stone-500" aria-hidden="true" />
+                      <span>{point}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               </div>
             ))}
           </div>
         </Section>
 
-        {/* Полоса доказательств ценности */}
-        <Section id="value">
+        {/* Контраст ритма жизни: до и после */}
+        <BeforeAfterSection />
+
+        {/* Демонстрация продукта: 1 исходник -> 2 черновика -> утверждение */}
+        <Section id="demo" tone="muted">
           <SectionHeader
-            eyebrow={VALUE_STRIP.eyebrow}
-            titleDark={VALUE_STRIP.titleDark}
-            titleMuted={VALUE_STRIP.titleMuted}
+            eyebrow={B2C_DEMO.eyebrow}
+            titleDark={B2C_DEMO.titleDark}
+            titleMuted={B2C_DEMO.titleMuted}
+            lead={B2C_DEMO.lead}
           />
-          <dl className="mt-12 grid gap-6 lg:grid-cols-3">
-            {VALUE_STRIP.items.map((v) => (
-              <div key={v.label} className="rounded-xl border border-stone-200 bg-white p-6">
-                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
-                  {v.label}
-                </dt>
-                <dd className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
-                  {v.value}
-                </dd>
-                <dd className="mt-3 text-sm leading-relaxed text-stone-600">{v.desc}</dd>
-                {v.href ? (
-                  <dd className="mt-4">
-                    <a
-                      href={v.href}
-                      target={v.href.startsWith("http") ? "_blank" : undefined}
-                      rel={v.href.startsWith("http") ? "noreferrer" : undefined}
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-                    >
-                      {v.linkLabel}
-                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  </dd>
-                ) : null}
+          <div className="mt-12 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="flex flex-col gap-6">
+              <Artifact
+                label={B2C_DEMO.sourceLabel}
+                icon={<Mic className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />}
+                meta={B2C_DEMO.sourceMeta}
+              >
+                <blockquote className="border-l-2 border-primary/60 pl-4">
+                  <p className="text-sm leading-relaxed text-stone-800">
+                    {B2C_DEMO.sourceText}
+                  </p>
+                </blockquote>
+              </Artifact>
+
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-6">
+                <p className="flex items-center gap-2 text-sm font-semibold text-stone-900">
+                  <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden="true" />
+                  {B2C_DEMO.approvalTitle}
+                </p>
+                <p className="mt-2.5 text-sm leading-relaxed text-stone-700">
+                  {B2C_DEMO.approvalText}
+                </p>
               </div>
-            ))}
-          </dl>
+            </div>
+
+            <div className="flex flex-col gap-6">
+              {B2C_DEMO.drafts.map((draft) => (
+                <Artifact
+                  key={draft.channel}
+                  label={draft.channel}
+                  icon={<FileText className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />}
+                  meta={draft.format}
+                >
+                  <p className="text-sm leading-relaxed text-stone-800">
+                    {draft.text}
+                  </p>
+                </Artifact>
+              ))}
+            </div>
+          </div>
+          <p className="mt-6 text-xs leading-relaxed text-stone-500">
+            {B2C_DEMO.disclaimer}
+          </p>
         </Section>
 
-        {/* Мост к механике: весь «как работает» на отдельной странице */}
-        <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-stone-50 py-12 md:py-14">
+        {/* Мост к подробной механике */}
+        <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-background py-12 md:py-14">
           <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-5 px-4 sm:flex-row sm:items-center sm:px-6">
             <p className="max-w-2xl text-sm leading-relaxed text-stone-600">
               {MECHANICS_BRIDGE.text}
@@ -172,40 +200,70 @@ export default function GatewayPage() {
           </div>
         </section>
 
-        {/* Рамка пилота */}
-        <Section id="pilot-frame" tone="muted">
+        {/* Что происходит за 4 недели первого цикла */}
+        <FirstCycleSection />
+
+        {/* Пилот за 990 ₽: отдельное предложение до регулярных тарифов */}
+        <Section id="pilot">
           <SectionHeader
-            eyebrow={GATEWAY_PILOT_FRAME.eyebrow}
-            titleDark={GATEWAY_PILOT_FRAME.titleDark}
-            titleMuted={GATEWAY_PILOT_FRAME.titleMuted}
+            eyebrow={B2C_PILOT_OFFER.eyebrow}
+            titleDark={B2C_PILOT_OFFER.titleDark}
+            titleMuted={B2C_PILOT_OFFER.titleMuted}
+            lead={B2C_PILOT_OFFER.lead}
           />
-          <dl className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {GATEWAY_PILOT_FRAME.points.map((p) => (
-              <div key={p.term} className="border-t border-stone-200 pt-5">
-                <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
-                  {p.term}
-                </dt>
-                <dd className="mt-3 text-sm leading-relaxed text-stone-700">{p.desc}</dd>
+          <div className="mt-12 rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-sm sm:p-8">
+            <div className="flex flex-col justify-between gap-6 border-b border-stone-200 pb-6 md:flex-row md:items-end">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
+                  Стартовый цикл
+                </p>
+                <p className="font-display mt-2 text-4xl font-semibold tracking-tight text-stone-900">
+                  {B2C_PILOT_OFFER.price}
+                </p>
+                <p className="mt-1 text-sm text-stone-600">
+                  {B2C_PILOT_OFFER.priceNote}
+                </p>
               </div>
-            ))}
-          </dl>
-          <Button
-            asChild
-            variant="outline"
-            className="mt-10 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
-          >
-            <a href="/pilot">
-              {GATEWAY_PILOT_FRAME.link}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
-          </Button>
+              <Button asChild size="lg" className="text-base font-semibold">
+                <a
+                  href={B2C_PILOT_CTA.href}
+                  target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
+                  rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
+                >
+                  {B2C_PILOT_OFFER.cta}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
+            <dl className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {B2C_PILOT_OFFER.points.map((point) => (
+                <div key={point.term} className="border-t border-stone-100 pt-4">
+                  <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
+                    {point.term}
+                  </dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-stone-800">
+                    {point.desc}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Section>
 
-        {/* Форма заявки */}
+        {/* Тарифная матрица регулярной работы после пилота */}
+        <TariffsSection />
+
+        {/* Частые вопросы */}
+        <FaqSection />
+
+        {/* Регистрация на пилот за 990 ₽ */}
         <LeadForm
-          contour="gateway"
-          entryPoint="final_form"
-          lead="Коротко опишите, чем вы занимаетесь и где публикуетесь. Мы разберём каналы и предложим формат первого цикла. Ответим в течение рабочего дня."
+          contour="solo"
+          entryPoint="pilot_cta"
+          titleDark="Зарегистрироваться на пилот"
+          titleMuted="за 990 ₽"
+          submitLabel={B2C_PILOT_CTA.label}
+          lead="Оставьте контакты и укажите ваши каналы: пришлём ссылку на оплату пилота 990 ₽ и согласуем старт первого цикла из 6-9 публикаций. Ответим в течение рабочего дня."
         />
       </main>
       <SiteFooter />

@@ -1,15 +1,16 @@
 import { Logo } from "./header";
 
 /*
-  Подвал без личных контактов. Единая защищённая точка входа: форма.
-  Навигация повторяет маршруты сайта v3.0.
+  Подвал B2C-сайта NarrativeFox.
+  Навигация повторяет актуальные B2C-разделы без B2B-ссылок.
 */
 
 const NAV = [
-  { href: "/solo", label: "Для экспертов и авторов" },
-  { href: "/business", label: "Для B2B и техно-продуктов" },
+  { href: "/#scenarios", label: "Для кого" },
+  { href: "/#demo", label: "Пример работы" },
+  { href: "/#tariffs", label: "Пилот и тарифы" },
   { href: "/how-it-works", label: "Как устроена система" },
-  { href: "/pilot", label: "Пилот и стоимость" },
+  { href: "/pilot", label: "Условия пилота" },
 ];
 
 export function SiteFooter() {
@@ -19,7 +20,7 @@ export function SiteFooter() {
         <div className="flex flex-col gap-3">
           <Logo />
           <p className="text-sm text-stone-500">
-            © 2026 NarrativeFox. Контент-маркетинг ведёт система.
+            © 2026 NarrativeFox. Регулярные публикации в вашем голосе.
           </p>
         </div>
         <nav aria-label="Навигация в подвале">
