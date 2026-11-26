@@ -1,11 +1,12 @@
 import { Section, SectionHeader } from "./bits";
 import { Button } from "@/components/ui/button";
-import { TARIFFS } from "@/lib/content/solo-content";
-import { Check } from "lucide-react";
+import { B2C_PILOT_CTA, TARIFFS } from "@/lib/content/solo-content";
+import { ArrowRight, Check } from "lucide-react";
 
 /*
-  Тарифы контура B2C. Оси объёма: активные проекты, площадки,
-  частота публикаций. Цена: по запросу, ценовая политика в проработке.
+  Тарифы контура B2C после пилота. Оси объёма: активные проекты,
+  площадки, частота публикаций. Цена: по запросу, ценовая политика
+  в проработке. Под матрицей повторяется CTA на пилот за 990 ₽.
 */
 
 export function TariffsSection() {
@@ -71,13 +72,20 @@ export function TariffsSection() {
         ))}
       </ul>
 
-      <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl border border-stone-200 bg-white p-6 sm:flex-row sm:items-center">
+      <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl border border-stone-200 bg-white p-6 lg:flex-row lg:items-center">
         <p className="flex items-start gap-2.5 text-sm leading-relaxed text-stone-700">
           <Check className="mt-0.5 h-4 w-4 shrink-0 text-stone-500" aria-hidden="true" />
           {TARIFFS.note}
         </p>
         <Button asChild size="lg" className="shrink-0 text-base font-semibold">
-          <a href="#contact">{TARIFFS.cta}</a>
+          <a
+            href={B2C_PILOT_CTA.href}
+            target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
+            rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
+          >
+            {TARIFFS.cta}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
         </Button>
       </div>
     </Section>

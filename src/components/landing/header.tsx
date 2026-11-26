@@ -1,16 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { B2C_PILOT_CTA } from "@/lib/content/solo-content";
 
 /*
-  Липкая шапка, единая для всех страниц сайта v3.0.
-  Навигация по маршрутам: контуры, разбор системы, пилот.
-  Одно основное действие, без конкурирующих кнопок.
+  Липкая шапка B2C-посадочной NarrativeFox.
+  Публичная навигация сфокусирована на B2C-сценарии и пилоте за 990 ₽.
 */
 
 const NAV = [
-  { href: "/solo", label: "Для экспертов и авторов" },
-  { href: "/business", label: "Для B2B и техно-продуктов" },
+  { href: "/#scenarios", label: "Для кого" },
+  { href: "/#demo", label: "Пример работы" },
+  { href: "/#tariffs", label: "Пилот и тарифы" },
   { href: "/how-it-works", label: "Как устроена система" },
-  { href: "/pilot", label: "Пилот и стоимость" },
 ];
 
 export function Logo({ className = "" }: { className?: string }) {
@@ -47,7 +47,13 @@ export function SiteHeader() {
           ))}
         </nav>
         <Button asChild size="sm" className="font-semibold">
-          <a href="#contact">Обсудить пилот</a>
+          <a
+            href={B2C_PILOT_CTA.href}
+            target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
+            rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
+          >
+            {B2C_PILOT_CTA.shortLabel}
+          </a>
         </Button>
       </div>
     </header>
