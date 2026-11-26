@@ -6,27 +6,23 @@ import { LeadForm } from "@/components/landing/lead-form";
 import { LegacyForRedirect } from "@/components/landing/legacy-redirect";
 import { Artifact, Section, SectionHeader } from "@/components/landing/bits";
 import { BeforeAfterSection } from "@/components/landing/solo-blocks";
-import { FirstCycleSection } from "@/components/landing/first-cycle";
 import { TariffsSection } from "@/components/landing/tariffs";
 import { FaqSection } from "@/components/landing/faq";
 import { Button } from "@/components/ui/button";
 import {
   B2C_DEMO,
+  B2C_FAQ,
   B2C_HERO,
   B2C_PILOT_CTA,
-  B2C_PILOT_OFFER,
   B2C_SCENARIOS,
 } from "@/lib/content/solo-content";
 import { MECHANICS_BRIDGE } from "@/lib/content/shared";
 import { ArrowRight, Check, CheckCircle2, FileText, Mic } from "lucide-react";
 
 /*
-  Главная B2C-посадочная NarrativeFox:
-  один сценарий входа для независимых экспертов, мастеров и авторов.
-  Hero -> два B2C-сценария -> неделя до и после -> демонстрация продукта ->
-  мост к механике -> первый цикл -> платный пилот 990 ₽ / 2 недели ->
-  тарифная матрица (Демо / Пилот / Старт / Профессионал / Эксперт) ->
-  FAQ -> регистрация и оплата пилота.
+  Главная B2C-посадочная NarrativeFox (компактная структура без дублей):
+  Hero -> два B2C-сценария -> ритм до/после -> демонстрация продукта ->
+  мост к механике -> пилот 990 ₽ и тарифная матрица -> 5 B2C FAQ -> форма.
 */
 
 export const metadata: Metadata = {
@@ -64,14 +60,18 @@ export default function HomePage() {
                 {B2C_HERO.lead}
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Button asChild size="lg" className="text-base font-semibold">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-auto whitespace-normal py-3 text-center text-base font-semibold"
+                >
                   <a
                     href={B2C_PILOT_CTA.href}
                     target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
                     rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
                   >
-                    {B2C_HERO.ctaPrimary}
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    <span>{B2C_HERO.ctaPrimary}</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" aria-hidden="true" />
                   </a>
                 </Button>
                 <Button
@@ -126,7 +126,7 @@ export default function HomePage() {
           </div>
         </Section>
 
-        {/* Контраст ритма жизни: до и после */}
+        {/* Короткий контраст ритма: 3 строки */}
         <BeforeAfterSection />
 
         {/* Демонстрация продукта: 1 исходник -> 2 черновика -> утверждение */}
@@ -201,61 +201,17 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Что происходит в первом цикле */}
-        <FirstCycleSection />
-
-        {/* Платный пилот за 990 ₽ / 2 недели */}
-        <Section id="pilot">
-          <SectionHeader
-            eyebrow={B2C_PILOT_OFFER.eyebrow}
-            titleDark={B2C_PILOT_OFFER.titleDark}
-            titleMuted={B2C_PILOT_OFFER.titleMuted}
-            lead={B2C_PILOT_OFFER.lead}
-          />
-          <div className="mt-12 rounded-2xl border-2 border-stone-900 bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex flex-col justify-between gap-6 border-b border-stone-200 pb-6 md:flex-row md:items-end">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-                  Входной продукт
-                </p>
-                <p className="font-display mt-2 text-4xl font-semibold tracking-tight text-stone-900">
-                  {B2C_PILOT_OFFER.price}
-                </p>
-                <p className="mt-1 text-sm text-stone-600">
-                  {B2C_PILOT_OFFER.priceNote}
-                </p>
-              </div>
-              <Button asChild size="lg" className="text-base font-semibold">
-                <a
-                  href={B2C_PILOT_CTA.href}
-                  target={B2C_PILOT_CTA.isExternal ? "_blank" : undefined}
-                  rel={B2C_PILOT_CTA.isExternal ? "noreferrer" : undefined}
-                >
-                  {B2C_PILOT_OFFER.cta}
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </a>
-              </Button>
-            </div>
-            <dl className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {B2C_PILOT_OFFER.points.map((point) => (
-                <div key={point.term} className="border-t border-stone-100 pt-4">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
-                    {point.term}
-                  </dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-stone-800">
-                    {point.desc}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </Section>
-
-        {/* Актуальная тарифная матрица: Демо / Пилот / Старт / Профессионал / Эксперт */}
+        {/* Единый блок пилота 990 ₽ и тарифной матрицы */}
         <TariffsSection />
 
-        {/* Частые вопросы */}
-        <FaqSection />
+        {/* 5 ключевых B2C-вопросов */}
+        <FaqSection
+          items={B2C_FAQ}
+          eyebrow="Частые вопросы"
+          titleDark="Голос, оплата"
+          titleMuted="и доступы"
+          lead="Коротко о главном перед стартом пилота."
+        />
 
         {/* Регистрация на пилот за 990 ₽ */}
         <LeadForm
