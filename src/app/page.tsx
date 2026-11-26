@@ -20,7 +20,7 @@ import { MECHANICS_BRIDGE } from "@/lib/content/shared";
 import { ArrowRight, Check, CheckCircle2, FileText, Mic } from "lucide-react";
 
 /*
-  Главная B2C-посадочная NarrativeFox (компактная структура без дублей):
+  Главная B2C-посадочная NarrativeFox (адаптивная структура 320px+):
   Hero -> два B2C-сценария -> ритм до/после -> демонстрация продукта ->
   мост к механике -> пилот 990 ₽ и тарифная матрица -> 5 B2C FAQ -> форма.
 */
@@ -40,30 +40,30 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col overflow-x-clip bg-background">
       <LegacyForRedirect />
       <SiteHeader />
       <PageAnalytics page="/" />
       <main className="flex-1">
         {/* Первый экран: B2C value proposition и CTA на пилот за 990 ₽ */}
         <section id="top" className="border-b border-stone-200/60 bg-background">
-          <div className="mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 md:py-28">
+          <div className="mx-auto w-full max-w-6xl px-4 py-14 sm:px-6 sm:py-20 md:py-28">
             <div className="max-w-3xl">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
                 {B2C_HERO.overline}
               </p>
-              <h1 className="font-display mt-6 text-[2.2rem] font-semibold leading-[1.06] tracking-tight text-stone-900 sm:text-[3rem] lg:text-[3.6rem]">
+              <h1 className="font-display mt-5 break-words text-[1.9rem] font-semibold leading-[1.1] tracking-tight text-stone-900 sm:mt-6 sm:text-[3rem] sm:leading-[1.06] lg:text-[3.6rem]">
                 <span className="block">{B2C_HERO.h1Dark}</span>
                 <span className="block text-stone-500">{B2C_HERO.h1Muted}</span>
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-relaxed text-stone-700 sm:text-lg">
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-stone-700 sm:mt-7 sm:text-lg">
                 {B2C_HERO.lead}
               </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center">
                 <Button
                   asChild
                   size="lg"
-                  className="h-auto whitespace-normal py-3 text-center text-base font-semibold"
+                  className="h-auto w-full whitespace-normal py-3 text-center text-base font-semibold leading-snug sm:w-auto"
                 >
                   <a
                     href={B2C_PILOT_CTA.href}
@@ -78,7 +78,7 @@ export default function HomePage() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="border-stone-300 text-base font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+                  className="w-full border-stone-300 text-base font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900 sm:w-auto"
                 >
                   <a href="/how-it-works">{B2C_HERO.ctaSecondary}</a>
                 </Button>
@@ -98,16 +98,16 @@ export default function HomePage() {
             titleMuted={B2C_SCENARIOS.titleMuted}
             lead={B2C_SCENARIOS.lead}
           />
-          <div className="mt-14 grid gap-6 lg:grid-cols-2">
+          <div className="mt-10 grid gap-5 sm:mt-14 sm:gap-6 lg:grid-cols-2">
             {B2C_SCENARIOS.items.map((item) => (
               <div
                 key={item.title}
-                className="flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-8"
+                className="flex min-w-0 flex-col rounded-xl border border-stone-200 bg-white p-5 sm:p-8"
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
                   {item.badge}
                 </p>
-                <h3 className="font-display mt-3 text-2xl font-semibold tracking-tight text-stone-900">
+                <h3 className="font-display mt-3 text-xl font-semibold tracking-tight text-stone-900 sm:text-2xl">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-stone-700">
@@ -137,11 +137,11 @@ export default function HomePage() {
             titleMuted={B2C_DEMO.titleMuted}
             lead={B2C_DEMO.lead}
           />
-          <div className="mt-12 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="flex flex-col gap-6">
+          <div className="mt-10 grid gap-6 sm:mt-12 lg:grid-cols-[0.95fr_1.05fr]">
+            <div className="flex min-w-0 flex-col gap-6">
               <Artifact
                 label={B2C_DEMO.sourceLabel}
-                icon={<Mic className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />}
+                icon={<Mic className="h-3.5 w-3.5 shrink-0 text-stone-500" aria-hidden="true" />}
                 meta={B2C_DEMO.sourceMeta}
               >
                 <blockquote className="border-l-2 border-primary/60 pl-4">
@@ -151,10 +151,10 @@ export default function HomePage() {
                 </blockquote>
               </Artifact>
 
-              <div className="rounded-xl border border-primary/30 bg-primary/5 p-6">
+              <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 sm:p-6">
                 <p className="flex items-center gap-2 text-sm font-semibold text-stone-900">
-                  <CheckCircle2 className="h-4 w-4 text-primary" aria-hidden="true" />
-                  {B2C_DEMO.approvalTitle}
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
+                  <span>{B2C_DEMO.approvalTitle}</span>
                 </p>
                 <p className="mt-2.5 text-sm leading-relaxed text-stone-700">
                   {B2C_DEMO.approvalText}
@@ -162,12 +162,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-6">
+            <div className="flex min-w-0 flex-col gap-6">
               {B2C_DEMO.drafts.map((draft) => (
                 <Artifact
                   key={draft.channel}
                   label={draft.channel}
-                  icon={<FileText className="h-3.5 w-3.5 text-stone-500" aria-hidden="true" />}
+                  icon={<FileText className="h-3.5 w-3.5 shrink-0 text-stone-500" aria-hidden="true" />}
                   meta={draft.format}
                 >
                   <p className="text-sm leading-relaxed text-stone-800">
@@ -183,7 +183,7 @@ export default function HomePage() {
         </Section>
 
         {/* Мост к подробной механике */}
-        <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-background py-12 md:py-14">
+        <section id="mechanics-bridge" className="border-b border-stone-200/60 bg-background py-10 sm:py-12 md:py-14">
           <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-5 px-4 sm:flex-row sm:items-center sm:px-6">
             <p className="max-w-2xl text-sm leading-relaxed text-stone-600">
               {MECHANICS_BRIDGE.text}
@@ -191,7 +191,7 @@ export default function HomePage() {
             <Button
               asChild
               variant="outline"
-              className="shrink-0 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900"
+              className="w-full shrink-0 border-stone-300 font-medium text-stone-700 hover:bg-stone-50 hover:text-stone-900 sm:w-auto"
             >
               <a href={MECHANICS_BRIDGE.href}>
                 {MECHANICS_BRIDGE.link}

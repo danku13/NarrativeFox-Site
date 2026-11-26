@@ -2,11 +2,8 @@ import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
 /*
-  Общие элементы секций. Editorial-система по мотивам разбора metaflow.life:
-  - заголовок секции из двух строк: тёмная + приглушённая (stone-500);
-  - над заголовком тонкая линейка, слева eyebrow капсом, справа индекс секции;
-  - больше воздуха между секциями (py-20 / md:py-28);
-  - основной текст ограничен ~65 знаками.
+  Общие элементы секций. Editorial-система:
+  адаптивные заголовки и отступы для мобильных (320px+) и десктопа.
 */
 
 export function Section({
@@ -24,7 +21,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "scroll-mt-20 border-b border-stone-200/60 py-20 md:py-28",
+        "scroll-mt-20 border-b border-stone-200/60 py-14 sm:py-20 md:py-28",
         tone === "muted" && "bg-stone-50",
         className
       )}
@@ -51,27 +48,27 @@ export function SectionHeader({
 }) {
   return (
     <div className="max-w-3xl">
-      <div className="flex items-baseline justify-between gap-6 border-t border-stone-300 pt-5">
+      <div className="flex items-baseline justify-between gap-4 border-t border-stone-300 pt-5">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
           {eyebrow}
         </p>
         {index ? (
           <span
-            className="font-display text-sm font-semibold tabular-nums text-stone-400"
+            className="font-display shrink-0 text-sm font-semibold tabular-nums text-stone-400"
             aria-hidden="true"
           >
             {index} <span className="text-stone-300">/ {total}</span>
           </span>
         ) : null}
       </div>
-      <h2 className="font-display mt-7 text-4xl font-semibold leading-[1.08] tracking-tight text-stone-900 md:text-[2.75rem]">
+      <h2 className="font-display mt-6 break-words text-[1.75rem] font-semibold leading-[1.12] tracking-tight text-stone-900 sm:mt-7 sm:text-4xl sm:leading-[1.08] md:text-[2.75rem]">
         {titleDark}
         {titleMuted ? (
           <span className="block text-stone-500">{titleMuted}</span>
         ) : null}
       </h2>
       {lead ? (
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-stone-700 md:text-lg">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-stone-700 sm:mt-6 md:text-lg">
           {lead}
         </p>
       ) : null}
@@ -79,8 +76,7 @@ export function SectionHeader({
   );
 }
 
-/* Карточка-артефакт: имитация экрана продукта.
-   Верхняя панель с меткой, контент с явными внутренними отступами. */
+/* Карточка-артефакт: имитация экрана продукта с адаптивной шапкой. */
 export function Artifact({
   label,
   meta,
@@ -97,11 +93,11 @@ export function Artifact({
   return (
     <figure
       className={cn(
-        "overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm",
+        "min-w-0 overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm",
         className
       )}
     >
-      <figcaption className="flex items-center justify-between gap-3 border-b border-stone-200 bg-stone-50 px-4 py-2.5">
+      <figcaption className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-stone-200 bg-stone-50 px-4 py-2.5">
         <span className="flex items-center gap-2 text-xs font-semibold text-stone-700">
           {icon}
           {label}
@@ -115,8 +111,7 @@ export function Artifact({
   );
 }
 
-/* Бейдж статуса факта: цвет дублируется иконкой и текстом,
-   значение не кодируется только оттенком (правило доступности). */
+/* Бейдж статуса факта: цвет дублируется иконкой и текстом. */
 export function FactBadge({ kind }: { kind: "confirmed" | "assumed" }) {
   if (kind === "confirmed") {
     return (

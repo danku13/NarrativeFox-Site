@@ -8,10 +8,7 @@ import { ArrowRight, Check } from "lucide-react";
 
 /*
   Актуальная тарифная матрица B2C (danku13/NarrativeFox):
-  1) Входной ряд: Демо (0 ₽ / 3 дня) и Платный пилот (990 ₽ / 2 недели).
-  2) Переключатель длительности (1 / 3 / 6 мес) и 3 карточки (Старт / Профессионал / Эксперт).
-     Внутри карточек только 3 уникальных лимита с жёстким выравниванием строк;
-     общие свойства и докупки вынесены в компактный блок ниже.
+  адаптивная вёрстка для 320px+ и десктопа (1024px+).
 */
 
 export function TariffsSection() {
@@ -27,7 +24,7 @@ export function TariffsSection() {
       />
 
       {/* Входной ряд: Демо и Платный пилот */}
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
+      <div className="mt-10 grid gap-5 sm:mt-12 md:grid-cols-2 md:gap-6">
         {TARIFFS.entryTiers.map((tier) => {
           const isPilot = tier.key === "pilot";
           return (
@@ -35,12 +32,12 @@ export function TariffsSection() {
               key={tier.key}
               className={
                 isPilot
-                  ? "flex flex-col justify-between rounded-xl border-2 border-stone-900 bg-white p-6 shadow-sm"
-                  : "flex flex-col justify-between rounded-xl border border-stone-200 bg-white p-6"
+                  ? "flex min-w-0 flex-col justify-between rounded-xl border-2 border-stone-900 bg-white p-5 shadow-sm sm:p-6"
+                  : "flex min-w-0 flex-col justify-between rounded-xl border border-stone-200 bg-white p-5 sm:p-6"
               }
             >
               <div>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
                     {tier.badge}
                   </span>
@@ -48,7 +45,7 @@ export function TariffsSection() {
                     {tier.period}
                   </span>
                 </div>
-                <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                   <h3 className="font-display text-2xl font-semibold text-stone-900">
                     {tier.name}
                   </h3>
@@ -63,7 +60,7 @@ export function TariffsSection() {
                   <Button
                     asChild
                     size="default"
-                    className="h-auto w-full whitespace-normal py-2.5 text-center font-semibold"
+                    className="h-auto w-full whitespace-normal py-2.5 text-center font-semibold leading-snug"
                   >
                     <a
                       href={B2C_PILOT_CTA.href}
@@ -82,14 +79,14 @@ export function TariffsSection() {
       </div>
 
       {/* Переключатель длительности для регулярных тарифов */}
-      <div className="mt-12 flex flex-wrap items-center justify-between gap-4">
+      <div className="mt-10 flex flex-col gap-3 sm:mt-12 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
           Регулярные тарифы после пилота
         </p>
         <div
           role="tablist"
           aria-label="Период оплаты тарифа"
-          className="inline-flex rounded-lg border border-stone-200 bg-white p-1"
+          className="grid w-full grid-cols-3 rounded-lg border border-stone-200 bg-white p-1 sm:inline-flex sm:w-auto"
         >
           {TARIFFS.periods.map((p) => {
             const active = period === p.key;
@@ -102,8 +99,8 @@ export function TariffsSection() {
                 onClick={() => setPeriod(p.key)}
                 className={
                   active
-                    ? "flex items-center gap-1.5 whitespace-nowrap rounded-md bg-stone-900 px-3.5 py-2 text-xs font-semibold text-white transition-colors sm:text-sm"
-                    : "flex items-center gap-1.5 whitespace-nowrap rounded-md px-3.5 py-2 text-xs font-medium text-stone-600 transition-colors hover:text-stone-900 sm:text-sm"
+                    ? "flex items-center justify-center gap-1 whitespace-nowrap rounded-md bg-stone-900 px-2 py-2 text-xs font-semibold text-white transition-colors sm:gap-1.5 sm:px-3.5 sm:text-sm"
+                    : "flex items-center justify-center gap-1 whitespace-nowrap rounded-md px-2 py-2 text-xs font-medium text-stone-600 transition-colors hover:text-stone-900 sm:gap-1.5 sm:px-3.5 sm:text-sm"
                 }
               >
                 <span>{p.label}</span>
@@ -111,8 +108,8 @@ export function TariffsSection() {
                   <span
                     className={
                       active
-                        ? "rounded-full bg-white/15 px-1.5 py-0.5 text-[11px] font-medium text-white"
-                        : "rounded-full bg-stone-100 px-1.5 py-0.5 text-[11px] font-medium text-stone-600"
+                        ? "rounded-full bg-white/15 px-1.5 py-0.5 text-[10px] font-medium text-white sm:text-[11px]"
+                        : "rounded-full bg-stone-100 px-1.5 py-0.5 text-[10px] font-medium text-stone-600 sm:text-[11px]"
                     }
                   >
                     {p.badge}
@@ -133,19 +130,19 @@ export function TariffsSection() {
               key={plan.key}
               className={
                 plan.featured
-                  ? "relative flex flex-col rounded-xl border-2 border-stone-900 bg-white p-6 shadow-sm sm:p-7"
-                  : "relative flex flex-col rounded-xl border border-stone-200 bg-white p-6 sm:p-7"
+                  ? "relative flex min-w-0 flex-col rounded-xl border-2 border-stone-900 bg-white p-5 shadow-sm sm:p-7"
+                  : "relative flex min-w-0 flex-col rounded-xl border border-stone-200 bg-white p-5 sm:p-7"
               }
             >
               {plan.featured ? (
-                <span className="absolute -top-3 left-6 rounded-full bg-stone-900 px-3 py-1 text-xs font-semibold text-white">
+                <span className="absolute -top-3 left-5 rounded-full bg-stone-900 px-3 py-1 text-xs font-semibold text-white sm:left-6">
                   Частый выбор
                 </span>
               ) : null}
               <h3 className="font-display text-xl font-semibold text-stone-900">
                 {plan.name}
               </h3>
-              <p className="mt-2 min-h-[3rem] text-sm leading-relaxed text-stone-600">
+              <p className="mt-2 text-sm leading-relaxed text-stone-600 lg:min-h-[3rem]">
                 {plan.for}
               </p>
 
@@ -197,7 +194,7 @@ export function TariffsSection() {
 
       {/* Общее для всех тарифов и докупки */}
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
-        <div className="rounded-xl border border-stone-200 bg-white p-6">
+        <div className="min-w-0 rounded-xl border border-stone-200 bg-white p-5 sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
             Включено во все платные тарифы
           </p>
@@ -211,7 +208,7 @@ export function TariffsSection() {
           </ul>
         </div>
 
-        <div className="rounded-xl border border-stone-200 bg-white p-6">
+        <div className="min-w-0 rounded-xl border border-stone-200 bg-white p-5 sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">
             Докупки при росте
           </p>
@@ -219,7 +216,7 @@ export function TariffsSection() {
             {TARIFFS.addons.map((addon) => (
               <div
                 key={addon.title}
-                className="flex items-baseline justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 py-3 first:pt-0 last:pb-0"
               >
                 <dt className="text-sm text-stone-700">{addon.title}</dt>
                 <dd className="shrink-0 whitespace-nowrap text-sm font-semibold tabular-nums text-stone-900">
@@ -232,15 +229,15 @@ export function TariffsSection() {
       </div>
 
       {/* Повтор CTA под матрицей */}
-      <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl border border-stone-200 bg-white p-6 lg:flex-row lg:items-center">
+      <div className="mt-8 flex flex-col items-start justify-between gap-5 rounded-xl border border-stone-200 bg-white p-5 sm:p-6 lg:flex-row lg:items-center">
         <p className="flex items-start gap-2.5 text-sm leading-relaxed text-stone-700">
           <Check className="mt-0.5 h-4 w-4 shrink-0 text-stone-500" aria-hidden="true" />
-          {TARIFFS.note}
+          <span>{TARIFFS.note}</span>
         </p>
         <Button
           asChild
           size="lg"
-          className="h-auto w-full shrink-0 whitespace-normal py-3 text-center text-base font-semibold lg:w-auto"
+          className="h-auto w-full shrink-0 whitespace-normal py-3 text-center text-base font-semibold leading-snug lg:w-auto"
         >
           <a
             href={B2C_PILOT_CTA.href}

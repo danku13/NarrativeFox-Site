@@ -14,15 +14,6 @@ import { useRole } from "./role-switcher";
 /*
   Единственный защищённый канал связи: короткая форма с антиспамом.
   Вместе с заявкой уходит контекст воронки: контур, роль и точка входа.
-
-  Серверный режим: POST /api/leads с honeypot-полем и временной
-  ловушкой (elapsedMs) на сервере.
-
-  Статический режим (NEXT_PUBLIC_STATIC_EXPORT=1, GitHub Pages):
-  приёмник ищется в таком порядке: внешний API (NEXT_PUBLIC_LEAD_ENDPOINT,
-  контракт тот же), затем почтовый клиент посетителя
-  (NEXT_PUBLIC_LEAD_EMAIL), без них честное уведомление, что приём
-  заявок ещё не подключён.
 */
 
 type Status = "idle" | "sending" | "success" | "error" | "demo";
@@ -70,8 +61,6 @@ export function LeadForm({
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    // Honeypot работает в любом режиме: ботам не подсказываем,
-    // что заявка никуда не ушла.
     if (String(data.get("website") ?? "") !== "") {
       setStatus("success");
       form.reset();
@@ -80,10 +69,6 @@ export function LeadForm({
 
     setError(null);
 
-    /*
-      Статическая сборка: без своего сервера. Внешний приёмник
-      или почтовый клиент, иначе честная витрина.
-    */
     if (STATIC_EXPORT) {
       const payload = {
         name: String(data.get("name") ?? "").trim(),
@@ -143,7 +128,6 @@ export function LeadForm({
         return;
       }
 
-      // Приёмника нет: не делаем вид, что заявка ушла.
       setStatus("demo");
       track("nf_lead_unavailable", { contour, segment, entryPoint });
       return;
@@ -187,30 +171,30 @@ export function LeadForm({
   }
 
   return (
-    <section id="contact" className="scroll-mt-20 border-b border-stone-200/60 bg-background py-20 md:py-28">
-      <div className="mx-auto grid w-full max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-        <div className="max-w-xl">
-          <div className="flex items-baseline justify-between gap-6 border-t border-stone-300 pt-5">
+    <section id="contact" className="scroll-mt-20 border-b border-stone-200/60 bg-background py-14 sm:py-20 md:py-28">
+      <div className="mx-auto grid w-full max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <div className="min-w-0 max-w-xl">
+          <div className="flex items-baseline justify-between gap-4 border-t border-stone-300 pt-5">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
               {FORM.eyebrow}
             </p>
             {index ? (
               <span
-                className="font-display text-sm font-semibold tabular-nums text-stone-400"
+                className="font-display shrink-0 text-sm font-semibold tabular-nums text-stone-400"
                 aria-hidden="true"
               >
                 {index}
               </span>
             ) : null}
           </div>
-          <h2 className="font-display mt-7 text-3xl font-semibold leading-[1.1] tracking-tight text-stone-900 md:text-4xl">
+          <h2 className="font-display mt-6 break-words text-[1.65rem] font-semibold leading-[1.12] tracking-tight text-stone-900 sm:mt-7 sm:text-3xl md:text-4xl">
             {titleDark}
             <span className="block text-stone-500">{titleMuted}</span>
           </h2>
-          <p className="mt-6 text-base leading-relaxed text-stone-700 md:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-stone-700 sm:mt-6 md:text-lg">
             {lead}
           </p>
-          <ul className="mt-8 space-y-3">
+          <ul className="mt-6 space-y-3 sm:mt-8">
             {FORM.bullets.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-stone-500" aria-hidden="true" />
@@ -220,7 +204,7 @@ export function LeadForm({
           </ul>
         </div>
 
-        <div className="rounded-xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="min-w-0 rounded-xl border border-stone-200 bg-white p-5 shadow-sm sm:p-8">
           {status === "success" ? (
             <div className="flex h-full min-h-80 flex-col items-center justify-center text-center">
               <CheckCircle2 className="h-10 w-10 text-stone-500" aria-hidden="true" />
@@ -331,17 +315,17 @@ export function LeadForm({
                 type="submit"
                 size="lg"
                 disabled={status === "sending"}
-                className="w-full text-base font-semibold"
+                className="h-auto w-full whitespace-normal py-3 text-center text-base font-semibold leading-snug"
               >
                 {status === "sending" ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
-                    {FORM.sending}
+                    <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden="true" />
+                    <span>{FORM.sending}</span>
                   </>
                 ) : (
                   <>
-                    <Send className="h-4 w-4" aria-hidden="true" />
-                    {submitLabel ?? FORM.submit}
+                    <Send className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span>{submitLabel ?? FORM.submit}</span>
                   </>
                 )}
               </Button>
